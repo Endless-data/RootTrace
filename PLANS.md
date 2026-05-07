@@ -32,14 +32,14 @@ The system should support multiple users, multiple family trees, member manageme
 
 ## Tech Stack
 
-- Application framework: TODO.
-- Programming language: TODO.
-- Database: TODO.
-- ORM or database access layer: TODO.
-- Frontend/UI approach: TODO.
-- Test framework: TODO.
-- Data generation approach: TODO.
-- Report format: TODO.
+- Application framework: Flask.
+- Programming language: Python.
+- Database: PostgreSQL.
+- ORM or database access layer: SQLAlchemy. The exact integration style, such as SQLAlchemy directly or Flask-SQLAlchemy, will be decided during the project skeleton and schema milestones.
+- Frontend/UI approach: Flask server-rendered HTML templates for the MVP.
+- Test framework: pytest.
+- Data generation approach: Python scripts that generate reproducible CSV or SQL-compatible data.
+- Report format: Markdown first, with final export format decided according to course submission requirements.
 
 ## Milestones
 
@@ -73,15 +73,18 @@ Goal:
 File scope:
 - `PLANS.md`
 - `README.md`
-- Framework or dependency files only after the stack is confirmed: TODO.
+- Do not create framework, dependency, database, or application skeleton files in this milestone.
 
 Verification command:
-- TODO: depends on selected stack.
+- `test -f PLANS.md && test -f README.md`
+- `rg "Flask|PostgreSQL|SQLAlchemy|pytest|Milestone 1" PLANS.md README.md`
+- `git status --short`
 
 Completion standard:
 - Tech stack is documented.
 - Local setup command is documented.
 - No feature implementation is mixed into this milestone.
+- No `app/`, `src/`, `tests/`, dependency file, database config, migration, or business code is created.
 
 Recommended commit message:
 - `docs: define technical baseline`
@@ -401,9 +404,9 @@ Recommended commit message:
 
 - `AGENTS.md` exists and defines project-specific Codex working rules.
 - `docs/实验内容.md` exists and is the primary requirements document.
-- `README.md` only contains the project name.
-- `PLANS.md` is being created as the long-term roadmap.
-- No application stack has been selected yet.
+- `README.md` documents the project baseline.
+- `PLANS.md` exists as the long-term roadmap.
+- Milestone 1 technical baseline has been selected: Flask, Python, PostgreSQL, SQLAlchemy, server-rendered HTML templates, pytest, Python data generation scripts, and Markdown-first reporting.
 - No business code has been implemented yet.
 
 ## Progress Log
@@ -411,12 +414,14 @@ Recommended commit message:
 - 2026-05-07: Read current repository files and experiment requirements.
 - 2026-05-07: Added `AGENTS.md` for project working rules.
 - 2026-05-07: Added `PLANS.md` roadmap.
+- 2026-05-07: Completed Milestone 1 technical baseline documentation.
 
 ## Open Questions
 
-- Which application stack should be used: Flask, Django, .NET, or another option?
-- Which RDBMS should be used: MySQL, PostgreSQL, SQLite for early development, or another option?
-- Should the UI be web-based or desktop-based?
-- What format should the final report use?
+- Should SQLAlchemy be used directly or through Flask-SQLAlchemy?
+- Which Python version should be required for the project?
+- Which PostgreSQL version should be documented and used for screenshots?
+- Should local development use a system PostgreSQL install or Docker Compose?
+- What final report export format is required by the course?
 - Should generated large data files be committed, ignored, or produced on demand?
 - What is the preferred language for code comments and report text?
