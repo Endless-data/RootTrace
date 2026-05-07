@@ -1,0 +1,422 @@
+# RootTrace Development Roadmap
+
+## Project Goal
+
+Build a genealogy management system based on `docs/实验内容.md`.
+
+The system should support multiple users, multiple family trees, member management, blood and marriage relationships, tree previews, ancestor queries, relationship path queries, large-scale simulated data, SQL query deliverables, indexing experiments, and final report materials.
+
+## MVP Scope
+
+- User registration and login.
+- Family tree CRUD.
+- Member CRUD with fuzzy name search.
+- Permission rule: users can access family trees they created or were invited to edit.
+- Basic dashboard with total member count and gender ratio.
+- Tree preview for one branch.
+- Ancestor query by member ID.
+- Relationship path query between two member IDs.
+- Database schema with primary keys, foreign keys, and required constraints.
+- Core SQL files for required queries.
+- Seed or generation workflow for demonstrable test data.
+- Minimal report artifacts required by the experiment.
+
+## Non-goals
+
+- Do not implement the entire project in one milestone.
+- Do not add mobile apps unless explicitly requested.
+- Do not add analytics, telemetry, or external network calls unless explicitly requested.
+- Do not optimize for production deployment before the MVP works locally.
+- Do not introduce unspecified third-party services.
+- Do not hardcode secrets or database credentials.
+
+## Tech Stack
+
+- Application framework: TODO.
+- Programming language: TODO.
+- Database: TODO.
+- ORM or database access layer: TODO.
+- Frontend/UI approach: TODO.
+- Test framework: TODO.
+- Data generation approach: TODO.
+- Report format: TODO.
+
+## Milestones
+
+### Milestone 0: Project Ground Rules And Roadmap
+
+Goal:
+- Establish project working rules and a long-term roadmap.
+
+File scope:
+- `AGENTS.md`
+- `PLANS.md`
+- `README.md` only if the user explicitly asks for documentation updates.
+
+Verification command:
+- `test -f AGENTS.md && test -f PLANS.md`
+- `sed -n '1,220p' PLANS.md`
+
+Completion standard:
+- `AGENTS.md` exists.
+- `PLANS.md` exists and includes project goal, scope, milestones, verification commands, status, progress log, and open questions.
+- No business code is created.
+
+Recommended commit message:
+- `docs: add project roadmap and codex rules`
+
+### Milestone 1: Choose Technical Baseline
+
+Goal:
+- Decide the concrete application framework, database, test tool, and local run strategy.
+
+File scope:
+- `PLANS.md`
+- `README.md`
+- Framework or dependency files only after the stack is confirmed: TODO.
+
+Verification command:
+- TODO: depends on selected stack.
+
+Completion standard:
+- Tech stack is documented.
+- Local setup command is documented.
+- No feature implementation is mixed into this milestone.
+
+Recommended commit message:
+- `docs: define technical baseline`
+
+### Milestone 2: Project Skeleton
+
+Goal:
+- Create the minimal runnable project structure for the selected stack.
+
+File scope:
+- TODO: application entrypoint path.
+- TODO: dependency/config files.
+- TODO: test directory path.
+- `README.md`
+
+Verification command:
+- TODO: run the selected framework's minimal build or test command.
+
+Completion standard:
+- The application can start or the base test suite can run.
+- No genealogy business behavior is implemented yet.
+- README documents the local verification command.
+
+Recommended commit message:
+- `chore: scaffold application skeleton`
+
+### Milestone 3: Database Conceptual And Logical Design
+
+Goal:
+- Define the entities, relationships, relational schema, and normalization notes required by the experiment.
+
+File scope:
+- TODO: schema design document path.
+- TODO: ER diagram source/export path.
+- TODO: migration or SQL schema path, if selected stack uses migrations.
+
+Verification command:
+- TODO: validate diagram/docs manually or run schema lint/migration check after stack is selected.
+
+Completion standard:
+- Entities include users, family trees, memberships/invitations, members, parent-child relationships, and marriages, unless the final design justifies a different model.
+- Relationship cardinalities are documented.
+- 3NF or BCNF analysis is documented.
+- Primary keys, foreign keys, and CHECK constraints are specified.
+
+Recommended commit message:
+- `docs: add database design`
+
+### Milestone 4: Authentication And User Registration
+
+Goal:
+- Implement local user registration and login.
+
+File scope:
+- TODO: user model/schema files.
+- TODO: auth route/controller/view files.
+- TODO: auth tests.
+
+Verification command:
+- TODO: fastest relevant auth test command.
+
+Completion standard:
+- A user can register.
+- A user can log in.
+- Invalid login attempts fail safely.
+- No passwords or secrets are hardcoded.
+
+Recommended commit message:
+- `feat: add user registration and login`
+
+### Milestone 5: Family Tree Access Model
+
+Goal:
+- Implement family tree creation and invited collaborator access rules.
+
+File scope:
+- TODO: family tree model/schema files.
+- TODO: invitation or collaborator files.
+- TODO: access-control tests.
+
+Verification command:
+- TODO: fastest relevant family tree access test command.
+
+Completion standard:
+- A user can create a family tree.
+- A creator can invite another user.
+- A user can only view or edit trees they created or were invited to.
+- Unauthorized access is rejected.
+
+Recommended commit message:
+- `feat: add family tree access control`
+
+### Milestone 6: Member CRUD And Fuzzy Search
+
+Goal:
+- Implement member creation, update, delete, list, detail, and fuzzy name search within accessible family trees.
+
+File scope:
+- TODO: member model/schema files.
+- TODO: member route/controller/view files.
+- TODO: member tests.
+
+Verification command:
+- TODO: fastest relevant member test command.
+
+Completion standard:
+- Members store name, gender, birth/death year or date, and biography.
+- Search supports fuzzy name matching.
+- Member operations respect family tree permissions.
+- Delete behavior is explicit and does not violate project safety rules for repository files.
+
+Recommended commit message:
+- `feat: add member management`
+
+### Milestone 7: Relationship Management
+
+Goal:
+- Implement parent-child and marriage relationship storage and validation.
+
+File scope:
+- TODO: relationship schema/model files.
+- TODO: relationship route/controller/view files.
+- TODO: relationship tests.
+
+Verification command:
+- TODO: fastest relevant relationship test command.
+
+Completion standard:
+- Parent-child relationships can be created and queried.
+- Marriage relationships can be created and queried.
+- Constraints prevent invalid obvious cases where supported by the selected database.
+- Parent birth year before child birth year rule is enforced or documented if database limitations require application-level validation.
+
+Recommended commit message:
+- `feat: add genealogy relationship management`
+
+### Milestone 8: Dashboard And Tree Preview
+
+Goal:
+- Add dashboard statistics and a branch tree preview.
+
+File scope:
+- TODO: dashboard files.
+- TODO: tree preview files.
+- TODO: dashboard/tree tests.
+
+Verification command:
+- TODO: fastest relevant dashboard/tree test command.
+
+Completion standard:
+- Dashboard shows total member count and gender ratio for a selected accessible family tree.
+- Tree preview displays one branch as a hierarchy or indented list.
+- Output remains usable for members with duplicate names by showing IDs or other disambiguating data.
+
+Recommended commit message:
+- `feat: add dashboard and tree preview`
+
+### Milestone 9: Ancestor Query
+
+Goal:
+- Implement ancestor lookup by member ID.
+
+File scope:
+- TODO: ancestor query SQL/service files.
+- TODO: ancestor route/controller/view files.
+- TODO: ancestor tests.
+
+Verification command:
+- TODO: fastest relevant ancestor query test command.
+
+Completion standard:
+- Given a member ID, the system returns all known ancestors above the parent generation.
+- The result preserves generation depth or tree order.
+- The query works for unknown depth using a recursive strategy where the selected database supports it.
+
+Recommended commit message:
+- `feat: add ancestor query`
+
+### Milestone 10: Relationship Path Query
+
+Goal:
+- Implement relationship path lookup between two member IDs.
+
+File scope:
+- TODO: relationship path SQL/service files.
+- TODO: relationship path route/controller/view files.
+- TODO: relationship path tests.
+
+Verification command:
+- TODO: fastest relevant relationship path test command.
+
+Completion standard:
+- Given two member IDs, the system reports whether a relationship path exists.
+- If a path exists, the system displays the chain.
+- Duplicate names do not affect correctness because IDs are used.
+
+Recommended commit message:
+- `feat: add relationship path query`
+
+### Milestone 11: Required SQL Deliverables
+
+Goal:
+- Add standalone SQL statements for the experiment's required queries.
+
+File scope:
+- TODO: SQL deliverables directory.
+- TODO: query documentation path.
+
+Verification command:
+- TODO: database-specific SQL execution command.
+
+Completion standard:
+- SQL exists for spouse and children lookup.
+- SQL exists for recursive ancestor lookup.
+- SQL exists for generation with longest average lifespan.
+- SQL exists for male members over 50 without spouse.
+- SQL exists for members born earlier than their generation average.
+- Each requirement is implemented with one SQL statement where required.
+
+Recommended commit message:
+- `feat: add required sql queries`
+
+### Milestone 12: Simulated Data Generation
+
+Goal:
+- Generate demonstrable large-scale genealogy data according to the experiment constraints.
+
+File scope:
+- TODO: data generation script path.
+- TODO: generated data output path.
+- TODO: data generation tests or validation script.
+
+Verification command:
+- TODO: data validation command.
+
+Completion standard:
+- At least 10 family trees can be generated.
+- At least one family tree has more than 50,000 members.
+- The system has at least 100,000 simulated members.
+- Each family tree contains related members.
+- At least one family tree has at least 30 generations.
+- Generated outputs are documented and reproducible.
+
+Recommended commit message:
+- `feat: add simulated genealogy data generator`
+
+### Milestone 13: Import And Export Workflow
+
+Goal:
+- Document and verify database import/export using the selected RDBMS tooling.
+
+File scope:
+- TODO: import/export SQL or script path.
+- TODO: documentation path.
+- TODO: sample exported branch backup path.
+
+Verification command:
+- TODO: database-specific import/export verification command.
+
+Completion standard:
+- Bulk import command is documented and tested.
+- Branch export or backup command is documented and tested.
+- RDBMS name and version are recorded.
+
+Recommended commit message:
+- `docs: add import and export workflow`
+
+### Milestone 14: Index And Performance Experiment
+
+Goal:
+- Add indexes and record performance comparison for the required query.
+
+File scope:
+- TODO: index SQL/migration files.
+- TODO: performance notes path.
+- TODO: EXPLAIN output artifact path.
+
+Verification command:
+- TODO: database-specific EXPLAIN command.
+
+Completion standard:
+- Index strategy covers fuzzy name search.
+- Index strategy covers querying children by parent ID.
+- Performance comparison is recorded with and without indexes.
+- EXPLAIN output is captured and explained.
+
+Recommended commit message:
+- `perf: add indexes and performance analysis`
+
+### Milestone 15: Final Report Assembly
+
+Goal:
+- Assemble final experiment report and submission artifacts.
+
+File scope:
+- TODO: report document path.
+- TODO: diagram export path.
+- TODO: SQL result screenshot path.
+- TODO: database export path.
+
+Verification command:
+- TODO: report build/export command or manual checklist.
+
+Completion standard:
+- Report includes ER diagram.
+- Report includes relational schema and 3NF or BCNF analysis.
+- Report includes constraints and indexes.
+- Report includes data generation method and source code reference.
+- Report includes RDBMS name and version.
+- Report includes SQL statements and execution result screenshots.
+- Database export or backup file is prepared.
+
+Recommended commit message:
+- `docs: assemble final experiment report`
+
+## Current Status
+
+- `AGENTS.md` exists and defines project-specific Codex working rules.
+- `docs/实验内容.md` exists and is the primary requirements document.
+- `README.md` only contains the project name.
+- `PLANS.md` is being created as the long-term roadmap.
+- No application stack has been selected yet.
+- No business code has been implemented yet.
+
+## Progress Log
+
+- 2026-05-07: Read current repository files and experiment requirements.
+- 2026-05-07: Added `AGENTS.md` for project working rules.
+- 2026-05-07: Added `PLANS.md` roadmap.
+
+## Open Questions
+
+- Which application stack should be used: Flask, Django, .NET, or another option?
+- Which RDBMS should be used: MySQL, PostgreSQL, SQLite for early development, or another option?
+- Should the UI be web-based or desktop-based?
+- What format should the final report use?
+- Should generated large data files be committed, ignored, or produced on demand?
+- What is the preferred language for code comments and report text?
