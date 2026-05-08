@@ -95,18 +95,30 @@ Goal:
 - Create the minimal runnable project structure for the selected stack.
 
 File scope:
-- TODO: application entrypoint path.
-- TODO: dependency/config files.
-- TODO: test directory path.
+- `app/__init__.py`
+- `app/extensions.py`
+- `app/routes.py`
+- `tests/test_app.py`
+- `pyproject.toml`
+- `uv.lock`
+- `.gitignore`
 - `README.md`
+- `PLANS.md`
 
 Verification command:
-- TODO: run the selected framework's minimal build or test command.
+- `uv --version`
+- `uv sync --dev`
+- `uv run pytest`
+- `uv run flask --app app routes`
+- `git status --short`
 
 Completion standard:
 - The application can start or the base test suite can run.
 - No genealogy business behavior is implemented yet.
 - README documents the local verification command.
+- Flask application factory `create_app()` exists.
+- The root route `/` returns a minimal health response.
+- SQLAlchemy is initialized as an extension, but no schema, model, migration, or database connectivity verification is added.
 
 Recommended commit message:
 - `chore: scaffold application skeleton`
@@ -407,7 +419,8 @@ Recommended commit message:
 - `README.md` documents the project baseline.
 - `PLANS.md` exists as the long-term roadmap.
 - Milestone 1 technical baseline has been selected: Flask, Python, PostgreSQL, SQLAlchemy, server-rendered HTML templates, pytest, Python data generation scripts, and Markdown-first reporting.
-- No business code has been implemented yet.
+- Milestone 2 Flask application skeleton has been created.
+- No genealogy business code has been implemented yet.
 
 ## Progress Log
 
@@ -415,6 +428,7 @@ Recommended commit message:
 - 2026-05-07: Added `AGENTS.md` for project working rules.
 - 2026-05-07: Added `PLANS.md` roadmap.
 - 2026-05-07: Completed Milestone 1 technical baseline documentation.
+- 2026-05-08: Created Milestone 2 minimal Flask application skeleton.
 
 ## Open Questions
 
