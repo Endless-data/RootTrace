@@ -129,18 +129,29 @@ Goal:
 - Define the entities, relationships, relational schema, and normalization notes required by the experiment.
 
 File scope:
-- TODO: schema design document path.
-- TODO: ER diagram source/export path.
-- TODO: migration or SQL schema path, if selected stack uses migrations.
+- `docs/database-design.md`
+- `docs/er.mmd`
+- `sql/schema.sql`
+- `compose.yaml`
+- `tests/test_database_design.py`
+- `README.md`
+- `PLANS.md`
 
 Verification command:
-- TODO: validate diagram/docs manually or run schema lint/migration check after stack is selected.
+- `uv run pytest`
+- `docker compose up -d db`
+- `docker compose exec -T db psql -U roottrace -d roottrace -f /schema/schema.sql`
+- `docker compose exec -T db psql -U roottrace -d roottrace -c "\dt"`
+- `rg "users|family_trees|members|parent_child_relationships|marriages" docs/database-design.md docs/er.mmd sql/schema.sql`
+- `git status --short`
 
 Completion standard:
 - Entities include users, family trees, memberships/invitations, members, parent-child relationships, and marriages, unless the final design justifies a different model.
 - Relationship cardinalities are documented.
 - 3NF or BCNF analysis is documented.
 - Primary keys, foreign keys, and CHECK constraints are specified.
+- PostgreSQL DDL can be executed against the Compose database.
+- No authentication, registration, SQLAlchemy model, migration, or business route is implemented.
 
 Recommended commit message:
 - `docs: add database design`
@@ -420,6 +431,7 @@ Recommended commit message:
 - `PLANS.md` exists as the long-term roadmap.
 - Milestone 1 technical baseline has been selected: Flask, Python, PostgreSQL, SQLAlchemy, server-rendered HTML templates, pytest, Python data generation scripts, and Markdown-first reporting.
 - Milestone 2 Flask application skeleton has been created.
+- Milestone 3 database design artifacts and PostgreSQL Compose validation environment have been created.
 - No genealogy business code has been implemented yet.
 
 ## Progress Log
@@ -429,6 +441,7 @@ Recommended commit message:
 - 2026-05-07: Added `PLANS.md` roadmap.
 - 2026-05-07: Completed Milestone 1 technical baseline documentation.
 - 2026-05-08: Created Milestone 2 minimal Flask application skeleton.
+- 2026-05-09: Created Milestone 3 database design, Mermaid ER source, PostgreSQL DDL, and Compose validation environment.
 
 ## Open Questions
 

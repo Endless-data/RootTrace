@@ -1,0 +1,67 @@
+erDiagram
+    USERS ||--o{ FAMILY_TREES : creates
+    USERS ||--o{ FAMILY_TREE_COLLABORATORS : invited_as
+    FAMILY_TREES ||--o{ FAMILY_TREE_COLLABORATORS : has
+    FAMILY_TREES ||--o{ MEMBERS : contains
+    FAMILY_TREES ||--o{ PARENT_CHILD_RELATIONSHIPS : scopes
+    FAMILY_TREES ||--o{ MARRIAGES : scopes
+    MEMBERS ||--o{ PARENT_CHILD_RELATIONSHIPS : parent
+    MEMBERS ||--o{ PARENT_CHILD_RELATIONSHIPS : child
+    MEMBERS ||--o{ MARRIAGES : spouse_a
+    MEMBERS ||--o{ MARRIAGES : spouse_b
+
+    USERS {
+        bigint id PK
+        text username UK
+        text password_hash
+        text display_name
+        timestamptz created_at
+    }
+
+    FAMILY_TREES {
+        bigint id PK
+        text name
+        text surname
+        date revision_time
+        bigint created_by_user_id FK
+        timestamptz created_at
+    }
+
+    FAMILY_TREE_COLLABORATORS {
+        bigint id PK
+        bigint family_tree_id FK
+        bigint user_id FK
+        text role
+        timestamptz invited_at
+    }
+
+    MEMBERS {
+        bigint id PK
+        bigint family_tree_id FK
+        text name
+        text gender
+        integer birth_year
+        integer death_year
+        integer generation
+        text biography
+        timestamptz created_at
+    }
+
+    PARENT_CHILD_RELATIONSHIPS {
+        bigint id PK
+        bigint family_tree_id FK
+        bigint parent_id FK
+        bigint child_id FK
+        text relationship_type
+    }
+
+    MARRIAGES {
+        bigint id PK
+        bigint family_tree_id FK
+        bigint person_a_id FK
+        bigint person_b_id FK
+        integer start_year
+        integer end_year
+        bigint person_low_id
+        bigint person_high_id
+    }
