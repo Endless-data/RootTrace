@@ -38,10 +38,14 @@ def test_design_document_covers_required_topics():
     for phrase in (
         "PostgreSQL",
         "3NF",
-        "Relationships",
-        "Relational Schema",
-        "Constraints",
-        "parent birth year",
+        "ER Diagram",
+        "ER 到关系模式转换",
+        "联系设计",
+        "关系模式",
+        "约束说明",
+        "约束设计",
+        "```mermaid",
+        "父母出生年份",
     ):
         assert phrase in design
 
