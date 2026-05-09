@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Family Trees</h2>
+  <p><a href="{{ url_for('family_trees.create') }}">Create family tree</a></p>
+
+  {% if family_trees %}
+    <ul>
+      {% for family_tree in family_trees %}
+        <li>
+          <a href="{{ url_for('family_trees.detail', tree_id=family_tree.id) }}">
+            {{ family_tree.name }} ({{ family_tree.surname }})
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No accessible family trees.</p>
+  {% endif %}
+{% endblock %}

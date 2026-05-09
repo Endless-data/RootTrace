@@ -11,6 +11,7 @@
       <nav>
         {% if g.user %}
           <span>{{ g.user.display_name }}</span>
+          <a href="{{ url_for('family_trees.index') }}">Family Trees</a>
           <form action="{{ url_for('auth.logout') }}" method="post">
             <button type="submit">Logout</button>
           </form>

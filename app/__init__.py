@@ -27,4 +27,8 @@ def create_app(test_config=None):
 
     app.register_blueprint(auth_bp)
 
+    from .family_trees import bp as family_trees_bp
+
+    app.register_blueprint(family_trees_bp)
+
     return app

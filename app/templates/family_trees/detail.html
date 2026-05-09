@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>{{ family_tree.name }}</h2>
+  <dl>
+    <dt>Surname</dt>
+    <dd>{{ family_tree.surname }}</dd>
+    <dt>Revision date</dt>
+    <dd>{{ family_tree.revision_time or "Not set" }}</dd>
+    <dt>Creator</dt>
+    <dd>{{ family_tree.creator.display_name }}</dd>
+  </dl>
+
+  <h3>Collaborators</h3>
+  {% if family_tree.collaborators %}
+    <ul>
+      {% for collaboration in family_tree.collaborators %}
+        <li>{{ collaboration.user.display_name }} ({{ collaboration.user.username }})</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No collaborators.</p>
+  {% endif %}
+
+  {% if g.user and g.user.id == family_tree.created_by_user_id %}
+    <h3>Invite Collaborator</h3>
+    {% if error %}
+      <p role="alert">{{ error }}</p>
+    {% endif %}
+    <form action="{{ url_for('family_trees.add_collaborator', tree_id=family_tree.id) }}" method="post">
+      <label for="username">Username</label>
+      <input id="username" name="username" required>
+      <button type="submit">Invite</button>
+    </form>
+  {% endif %}
+{% endblock %}

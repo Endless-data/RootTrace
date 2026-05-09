@@ -197,18 +197,30 @@ Goal:
 - Implement family tree creation and invited collaborator access rules.
 
 File scope:
-- TODO: family tree model/schema files.
-- TODO: invitation or collaborator files.
-- TODO: access-control tests.
+- `app/__init__.py`
+- `app/models.py`
+- `app/family_trees.py`
+- `app/templates/base.html`
+- `app/templates/family_trees/index.html`
+- `app/templates/family_trees/new.html`
+- `app/templates/family_trees/detail.html`
+- `tests/test_family_trees.py`
+- `README.md`
+- `PLANS.md`
 
 Verification command:
-- TODO: fastest relevant family tree access test command.
+- `uv sync --dev`
+- `uv run pytest`
+- `uv run flask --app app routes`
+- `git status --short`
 
 Completion standard:
 - A user can create a family tree.
 - A creator can invite another user.
 - A user can only view or edit trees they created or were invited to.
 - Unauthorized access is rejected.
+- Non-creators cannot invite collaborators.
+- No member CRUD, fuzzy member search, tree preview, or relationship feature is implemented.
 
 Recommended commit message:
 - `feat: add family tree access control`
@@ -446,7 +458,8 @@ Recommended commit message:
 - Milestone 2 Flask application skeleton has been created.
 - Milestone 3 database design artifacts and PostgreSQL Compose validation environment have been created.
 - Milestone 4 local user registration and login have been implemented.
-- No family tree access control or genealogy management code has been implemented yet.
+- Milestone 5 family tree creation and collaborator access control have been implemented.
+- No member CRUD, member search, tree preview, or relationship query has been implemented yet.
 
 ## Progress Log
 
@@ -457,6 +470,7 @@ Recommended commit message:
 - 2026-05-08: Created Milestone 2 minimal Flask application skeleton.
 - 2026-05-09: Created Milestone 3 database design, Mermaid ER source, PostgreSQL DDL, and Compose validation environment.
 - 2026-05-09: Created Milestone 4 local registration, login, logout, and authentication tests.
+- 2026-05-09: Created Milestone 5 family tree creation, collaborator invitation, and access-control tests.
 
 ## Open Questions
 
