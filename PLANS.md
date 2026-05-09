@@ -162,18 +162,31 @@ Goal:
 - Implement local user registration and login.
 
 File scope:
-- TODO: user model/schema files.
-- TODO: auth route/controller/view files.
-- TODO: auth tests.
+- `app/__init__.py`
+- `app/auth.py`
+- `app/models.py`
+- `app/templates/base.html`
+- `app/templates/auth/register.html`
+- `app/templates/auth/login.html`
+- `tests/test_auth.py`
+- `README.md`
+- `PLANS.md`
 
 Verification command:
-- TODO: fastest relevant auth test command.
+- `uv sync --dev`
+- `uv run pytest`
+- `uv run flask --app app routes`
+- `git status --short`
 
 Completion standard:
 - A user can register.
 - A user can log in.
 - Invalid login attempts fail safely.
 - No passwords or secrets are hardcoded.
+- Passwords are stored as hashes, not plaintext.
+- Users can log out.
+- Session state stores the logged-in user ID.
+- No family tree access model, collaborator invitation, or authorization rule is implemented.
 
 Recommended commit message:
 - `feat: add user registration and login`
@@ -432,7 +445,8 @@ Recommended commit message:
 - Milestone 1 technical baseline has been selected: Flask, Python, PostgreSQL, SQLAlchemy, server-rendered HTML templates, pytest, Python data generation scripts, and Markdown-first reporting.
 - Milestone 2 Flask application skeleton has been created.
 - Milestone 3 database design artifacts and PostgreSQL Compose validation environment have been created.
-- No genealogy business code has been implemented yet.
+- Milestone 4 local user registration and login have been implemented.
+- No family tree access control or genealogy management code has been implemented yet.
 
 ## Progress Log
 
@@ -442,6 +456,7 @@ Recommended commit message:
 - 2026-05-07: Completed Milestone 1 technical baseline documentation.
 - 2026-05-08: Created Milestone 2 minimal Flask application skeleton.
 - 2026-05-09: Created Milestone 3 database design, Mermaid ER source, PostgreSQL DDL, and Compose validation environment.
+- 2026-05-09: Created Milestone 4 local registration, login, logout, and authentication tests.
 
 ## Open Questions
 

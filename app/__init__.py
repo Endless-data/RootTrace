@@ -9,6 +9,7 @@ from .routes import bp
 def create_app(test_config=None):
     app = Flask(__name__)
     app.config.from_mapping(
+        SECRET_KEY=os.environ.get("SECRET_KEY"),
         SQLALCHEMY_DATABASE_URI=os.environ.get(
             "DATABASE_URL",
             "postgresql+psycopg://localhost/roottrace",
@@ -21,5 +22,9 @@ def create_app(test_config=None):
 
     db.init_app(app)
     app.register_blueprint(bp)
+
+    from .auth import bp as auth_bp
+
+    app.register_blueprint(auth_bp)
 
     return app

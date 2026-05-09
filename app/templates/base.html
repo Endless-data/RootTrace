@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RootTrace</title>
+  </head>
+  <body>
+    <header>
+      <h1>RootTrace</h1>
+      <nav>
+        {% if g.user %}
+          <span>{{ g.user.display_name }}</span>
+          <form action="{{ url_for('auth.logout') }}" method="post">
+            <button type="submit">Logout</button>
+          </form>
+        {% else %}
+          <a href="{{ url_for('auth.register') }}">Register</a>
+          <a href="{{ url_for('auth.login') }}">Login</a>
+        {% endif %}
+      </nav>
+    </header>
+
+    {% block content %}{% endblock %}
+  </body>
+</html>
