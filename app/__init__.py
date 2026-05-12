@@ -39,4 +39,8 @@ def create_app(test_config=None):
 
     app.register_blueprint(relationships_bp)
 
+    from .tree_preview import bp as tree_preview_bp
+
+    app.register_blueprint(tree_preview_bp)
+
     return app

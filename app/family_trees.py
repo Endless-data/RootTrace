@@ -4,6 +4,7 @@ from functools import wraps
 from flask import Blueprint, abort, g, redirect, render_template, request, url_for
 
 from .auth import login_required
+from .dashboard import family_tree_member_stats
 from .extensions import db
 from .models import FamilyTree, FamilyTreeCollaborator, User
 
@@ -102,7 +103,11 @@ def detail(tree_id):
         abort(404)
     if not can_access_family_tree(g.user, family_tree):
         abort(403)
-    return render_template("family_trees/detail.html", family_tree=family_tree)
+    return render_template(
+        "family_trees/detail.html",
+        family_tree=family_tree,
+        stats=family_tree_member_stats(family_tree.id),
+    )
 
 
 @bp.post("/<int:tree_id>/collaborators")
@@ -116,18 +121,21 @@ def add_collaborator(family_tree):
         return render_template(
             "family_trees/detail.html",
             family_tree=family_tree,
+            stats=family_tree_member_stats(family_tree.id),
             error="User does not exist.",
         ), 400
     if user.id == family_tree.created_by_user_id:
         return render_template(
             "family_trees/detail.html",
             family_tree=family_tree,
+            stats=family_tree_member_stats(family_tree.id),
             error="Creator cannot be invited.",
         ), 400
     if any(collaboration.user_id == user.id for collaboration in family_tree.collaborators):
         return render_template(
             "family_trees/detail.html",
             family_tree=family_tree,
+            stats=family_tree_member_stats(family_tree.id),
             error="User is already a collaborator.",
         ), 400
 

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% macro render_node(node) %}
+  <li>
+    {{ node.member.name }} (#{{ node.member.id }}, {{ node.member.gender }}, generation {{ node.member.generation or "?" }})
+    {% if node.repeated %}
+      <span>cycle detected</span>
+    {% elif node.children %}
+      <ul>
+        {% for child in node.children %}
+          {{ render_node(child) }}
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </li>
+{% endmacro %}
+
+{% block content %}
+  <h2>Tree Preview - {{ family_tree.name }}</h2>
+  <form method="get">
+    <label for="root_member_id">Root member ID</label>
+    <input id="root_member_id" name="root_member_id" value="{{ root_member_id }}" required>
+    <button type="submit">Preview</button>
+  </form>
+
+  {% if tree %}
+    <h3>Descendants of {{ root_member.name }} (#{{ root_member.id }})</h3>
+    {% if tree.children %}
+      <ul>
+        {{ render_node(tree) }}
+      </ul>
+    {% else %}
+      <p>No descendants.</p>
+      <ul>
+        {{ render_node(tree) }}
+      </ul>
+    {% endif %}
+  {% else %}
+    <p>Enter a member ID to preview descendants.</p>
+  {% endif %}
+{% endblock %}

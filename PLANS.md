@@ -299,17 +299,28 @@ Goal:
 - Add dashboard statistics and a branch tree preview.
 
 File scope:
-- TODO: dashboard files.
-- TODO: tree preview files.
-- TODO: dashboard/tree tests.
+- `app/__init__.py`
+- `app/dashboard.py`
+- `app/family_trees.py`
+- `app/tree_preview.py`
+- `app/templates/family_trees/detail.html`
+- `app/templates/tree_preview/index.html`
+- `tests/test_dashboard_tree_preview.py`
+- `README.md`
+- `PLANS.md`
 
 Verification command:
-- TODO: fastest relevant dashboard/tree test command.
+- `uv sync --dev`
+- `uv run pytest`
+- `uv run flask --app app routes`
+- `git status --short`
 
 Completion standard:
 - Dashboard shows total member count and gender ratio for a selected accessible family tree.
 - Tree preview displays one branch as a hierarchy or indented list.
 - Output remains usable for members with duplicate names by showing IDs or other disambiguating data.
+- Tree preview is scoped to an accessible family tree and starts from a root member ID.
+- No ancestor recursive query or relationship path query is implemented.
 
 Recommended commit message:
 - `feat: add dashboard and tree preview`
@@ -485,7 +496,8 @@ Recommended commit message:
 - Milestone 5 family tree creation and collaborator access control have been implemented.
 - Milestone 6 member CRUD and fuzzy member search have been implemented.
 - Milestone 7 direct parent-child and marriage relationship management has been implemented.
-- No dashboard, tree preview, ancestor query, or relationship path query has been implemented yet.
+- Milestone 8 dashboard statistics and descendant tree preview have been implemented.
+- No ancestor query or relationship path query has been implemented yet.
 
 ## Progress Log
 
@@ -499,6 +511,7 @@ Recommended commit message:
 - 2026-05-09: Created Milestone 5 family tree creation, collaborator invitation, and access-control tests.
 - 2026-05-12: Created Milestone 6 member CRUD, scoped fuzzy search, and member access-control tests.
 - 2026-05-12: Created Milestone 7 parent-child and marriage relationship management tests.
+- 2026-05-12: Created Milestone 8 dashboard statistics and descendant tree preview tests.
 
 ## Open Questions
 
