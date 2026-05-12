@@ -266,18 +266,29 @@ Goal:
 - Implement parent-child and marriage relationship storage and validation.
 
 File scope:
-- TODO: relationship schema/model files.
-- TODO: relationship route/controller/view files.
-- TODO: relationship tests.
+- `app/__init__.py`
+- `app/models.py`
+- `app/relationships.py`
+- `app/templates/members/detail.html`
+- `app/templates/relationships/detail.html`
+- `tests/test_relationships.py`
+- `README.md`
+- `PLANS.md`
 
 Verification command:
-- TODO: fastest relevant relationship test command.
+- `uv sync --dev`
+- `uv run pytest`
+- `uv run flask --app app routes`
+- `git status --short`
 
 Completion standard:
 - Parent-child relationships can be created and queried.
 - Marriage relationships can be created and queried.
 - Constraints prevent invalid obvious cases where supported by the selected database.
 - Parent birth year before child birth year rule is enforced or documented if database limitations require application-level validation.
+- Relationships can be deleted.
+- Relationship objects must belong to the same accessible family tree.
+- No dashboard, tree preview, ancestor recursive query, or relationship path query is implemented.
 
 Recommended commit message:
 - `feat: add genealogy relationship management`
@@ -473,7 +484,8 @@ Recommended commit message:
 - Milestone 4 local user registration and login have been implemented.
 - Milestone 5 family tree creation and collaborator access control have been implemented.
 - Milestone 6 member CRUD and fuzzy member search have been implemented.
-- No relationship management, tree preview, ancestor query, or relationship path query has been implemented yet.
+- Milestone 7 direct parent-child and marriage relationship management has been implemented.
+- No dashboard, tree preview, ancestor query, or relationship path query has been implemented yet.
 
 ## Progress Log
 
@@ -486,6 +498,7 @@ Recommended commit message:
 - 2026-05-09: Created Milestone 4 local registration, login, logout, and authentication tests.
 - 2026-05-09: Created Milestone 5 family tree creation, collaborator invitation, and access-control tests.
 - 2026-05-12: Created Milestone 6 member CRUD, scoped fuzzy search, and member access-control tests.
+- 2026-05-12: Created Milestone 7 parent-child and marriage relationship management tests.
 
 ## Open Questions
 

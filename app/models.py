@@ -123,3 +123,110 @@ class Member(db.Model):
     )
 
     family_tree = db.relationship("FamilyTree", back_populates="members")
+    parent_relationships = db.relationship(
+        "ParentChildRelationship",
+        foreign_keys="ParentChildRelationship.child_id",
+        back_populates="child",
+        cascade="all, delete-orphan",
+    )
+    child_relationships = db.relationship(
+        "ParentChildRelationship",
+        foreign_keys="ParentChildRelationship.parent_id",
+        back_populates="parent",
+        cascade="all, delete-orphan",
+    )
+    marriages_as_person_a = db.relationship(
+        "Marriage",
+        foreign_keys="Marriage.person_a_id",
+        back_populates="person_a",
+        cascade="all, delete-orphan",
+    )
+    marriages_as_person_b = db.relationship(
+        "Marriage",
+        foreign_keys="Marriage.person_b_id",
+        back_populates="person_b",
+        cascade="all, delete-orphan",
+    )
+
+
+class ParentChildRelationship(db.Model):
+    __tablename__ = "parent_child_relationships"
+    __table_args__ = (
+        db.UniqueConstraint(
+            "parent_id",
+            "child_id",
+            "relationship_type",
+            name="uq_parent_child_relationships_pair_type",
+        ),
+    )
+
+    id = db.Column(
+        db.BigInteger().with_variant(db.Integer, "sqlite"),
+        primary_key=True,
+    )
+    family_tree_id = db.Column(
+        db.BigInteger().with_variant(db.Integer, "sqlite"),
+        db.ForeignKey("family_trees.id"),
+        nullable=False,
+    )
+    parent_id = db.Column(
+        db.BigInteger().with_variant(db.Integer, "sqlite"),
+        db.ForeignKey("members.id"),
+        nullable=False,
+    )
+    child_id = db.Column(
+        db.BigInteger().with_variant(db.Integer, "sqlite"),
+        db.ForeignKey("members.id"),
+        nullable=False,
+    )
+    relationship_type = db.Column(db.Text, nullable=False)
+
+    parent = db.relationship(
+        "Member",
+        foreign_keys=[parent_id],
+        back_populates="child_relationships",
+    )
+    child = db.relationship(
+        "Member",
+        foreign_keys=[child_id],
+        back_populates="parent_relationships",
+    )
+    family_tree = db.relationship("FamilyTree")
+
+
+class Marriage(db.Model):
+    __tablename__ = "marriages"
+
+    id = db.Column(
+        db.BigInteger().with_variant(db.Integer, "sqlite"),
+        primary_key=True,
+    )
+    family_tree_id = db.Column(
+        db.BigInteger().with_variant(db.Integer, "sqlite"),
+        db.ForeignKey("family_trees.id"),
+        nullable=False,
+    )
+    person_a_id = db.Column(
+        db.BigInteger().with_variant(db.Integer, "sqlite"),
+        db.ForeignKey("members.id"),
+        nullable=False,
+    )
+    person_b_id = db.Column(
+        db.BigInteger().with_variant(db.Integer, "sqlite"),
+        db.ForeignKey("members.id"),
+        nullable=False,
+    )
+    start_year = db.Column(db.Integer)
+    end_year = db.Column(db.Integer)
+
+    person_a = db.relationship(
+        "Member",
+        foreign_keys=[person_a_id],
+        back_populates="marriages_as_person_a",
+    )
+    person_b = db.relationship(
+        "Member",
+        foreign_keys=[person_b_id],
+        back_populates="marriages_as_person_b",
+    )
+    family_tree = db.relationship("FamilyTree")

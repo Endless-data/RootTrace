@@ -2,7 +2,7 @@
 
 RootTrace is a genealogy management system project based on `docs/实验内容.md`.
 
-The project is currently in Milestone 6: member CRUD and fuzzy search. The app supports local user registration, login, family tree creation, collaborator access control, and member management.
+The project is currently in Milestone 7: relationship management. The app supports local user registration, login, family tree creation, collaborator access control, member management, and direct parent-child or marriage relationships.
 
 ## Technical Baseline
 
@@ -17,7 +17,7 @@ The project is currently in Milestone 6: member CRUD and fuzzy search. The app s
 
 ## Current Development Rule
 
-Follow `AGENTS.md` and `PLANS.md` before implementation. Work on one milestone at a time, and do not start Milestone 7 until Milestone 6 is complete and verified.
+Follow `AGENTS.md` and `PLANS.md` before implementation. Work on one milestone at a time, and do not start Milestone 8 until Milestone 7 is complete and verified.
 
 ## Verification
 
@@ -67,3 +67,10 @@ The default `DATABASE_URL` is only a local placeholder. Real database credential
 - View a member: `/family-trees/<tree_id>/members/<member_id>`
 - Edit a member: `/family-trees/<tree_id>/members/<member_id>/edit`
 - Delete a member: `POST /family-trees/<tree_id>/members/<member_id>/delete`
+
+## Relationships
+
+- Manage a member's relationships: `/family-trees/<tree_id>/members/<member_id>/relationships`
+- Add a parent: `POST /family-trees/<tree_id>/members/<member_id>/relationships/parents`
+- Add a child: `POST /family-trees/<tree_id>/members/<member_id>/relationships/children`
+- Add a spouse: `POST /family-trees/<tree_id>/members/<member_id>/relationships/marriages`

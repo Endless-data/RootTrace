@@ -35,4 +35,8 @@ def create_app(test_config=None):
 
     app.register_blueprint(members_bp)
 
+    from .relationships import bp as relationships_bp
+
+    app.register_blueprint(relationships_bp)
+
     return app
