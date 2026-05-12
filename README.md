@@ -2,7 +2,7 @@
 
 RootTrace is a genealogy management system project based on `docs/实验内容.md`.
 
-The project is currently in Milestone 5: family tree access model. The app supports local user registration, login, family tree creation, and collaborator access control, but member CRUD is not implemented yet.
+The project is currently in Milestone 6: member CRUD and fuzzy search. The app supports local user registration, login, family tree creation, collaborator access control, and member management.
 
 ## Technical Baseline
 
@@ -17,7 +17,7 @@ The project is currently in Milestone 5: family tree access model. The app suppo
 
 ## Current Development Rule
 
-Follow `AGENTS.md` and `PLANS.md` before implementation. Work on one milestone at a time, and do not start Milestone 6 until Milestone 5 is complete and verified.
+Follow `AGENTS.md` and `PLANS.md` before implementation. Work on one milestone at a time, and do not start Milestone 7 until Milestone 6 is complete and verified.
 
 ## Verification
 
@@ -59,3 +59,11 @@ The default `DATABASE_URL` is only a local placeholder. Real database credential
 - Create a family tree: `/family-trees/new`
 - View a family tree: `/family-trees/<id>`
 - Invite a collaborator: `POST /family-trees/<id>/collaborators`
+
+## Members
+
+- List and search members: `/family-trees/<tree_id>/members`
+- Create a member: `/family-trees/<tree_id>/members/new`
+- View a member: `/family-trees/<tree_id>/members/<member_id>`
+- Edit a member: `/family-trees/<tree_id>/members/<member_id>/edit`
+- Delete a member: `POST /family-trees/<tree_id>/members/<member_id>/delete`

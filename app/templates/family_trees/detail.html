@@ -11,6 +11,8 @@
     <dd>{{ family_tree.creator.display_name }}</dd>
   </dl>
 
+  <p><a href="{{ url_for('members.index', tree_id=family_tree.id) }}">Members</a></p>
+
   <h3>Collaborators</h3>
   {% if family_tree.collaborators %}
     <ul>

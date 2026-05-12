@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>{{ member.name }}</h2>
+  <dl>
+    <dt>ID</dt>
+    <dd>{{ member.id }}</dd>
+    <dt>Gender</dt>
+    <dd>{{ member.gender }}</dd>
+    <dt>Birth year</dt>
+    <dd>{{ member.birth_year or "Not set" }}</dd>
+    <dt>Death year</dt>
+    <dd>{{ member.death_year or "Not set" }}</dd>
+    <dt>Generation</dt>
+    <dd>{{ member.generation or "Not set" }}</dd>
+    <dt>Biography</dt>
+    <dd>{{ member.biography or "Not set" }}</dd>
+  </dl>
+
+  <p>
+    <a href="{{ url_for('members.edit', tree_id=family_tree.id, member_id=member.id) }}">Edit</a>
+  </p>
+  <form action="{{ url_for('members.delete', tree_id=family_tree.id, member_id=member.id) }}" method="post">
+    <button type="submit">Delete</button>
+  </form>
+{% endblock %}

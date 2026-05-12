@@ -231,18 +231,31 @@ Goal:
 - Implement member creation, update, delete, list, detail, and fuzzy name search within accessible family trees.
 
 File scope:
-- TODO: member model/schema files.
-- TODO: member route/controller/view files.
-- TODO: member tests.
+- `app/__init__.py`
+- `app/models.py`
+- `app/members.py`
+- `app/templates/family_trees/detail.html`
+- `app/templates/members/index.html`
+- `app/templates/members/new.html`
+- `app/templates/members/edit.html`
+- `app/templates/members/detail.html`
+- `tests/test_members.py`
+- `README.md`
+- `PLANS.md`
 
 Verification command:
-- TODO: fastest relevant member test command.
+- `uv sync --dev`
+- `uv run pytest`
+- `uv run flask --app app routes`
+- `git status --short`
 
 Completion standard:
 - Members store name, gender, birth/death year or date, and biography.
 - Search supports fuzzy name matching.
 - Member operations respect family tree permissions.
 - Delete behavior is explicit and does not violate project safety rules for repository files.
+- Duplicate member names are disambiguated by member ID.
+- No parent-child relationship, marriage relationship, tree preview, ancestor query, or relationship path query is implemented.
 
 Recommended commit message:
 - `feat: add member management`
@@ -459,7 +472,8 @@ Recommended commit message:
 - Milestone 3 database design artifacts and PostgreSQL Compose validation environment have been created.
 - Milestone 4 local user registration and login have been implemented.
 - Milestone 5 family tree creation and collaborator access control have been implemented.
-- No member CRUD, member search, tree preview, or relationship query has been implemented yet.
+- Milestone 6 member CRUD and fuzzy member search have been implemented.
+- No relationship management, tree preview, ancestor query, or relationship path query has been implemented yet.
 
 ## Progress Log
 
@@ -471,6 +485,7 @@ Recommended commit message:
 - 2026-05-09: Created Milestone 3 database design, Mermaid ER source, PostgreSQL DDL, and Compose validation environment.
 - 2026-05-09: Created Milestone 4 local registration, login, logout, and authentication tests.
 - 2026-05-09: Created Milestone 5 family tree creation, collaborator invitation, and access-control tests.
+- 2026-05-12: Created Milestone 6 member CRUD, scoped fuzzy search, and member access-control tests.
 
 ## Open Questions
 

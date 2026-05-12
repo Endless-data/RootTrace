@@ -56,6 +56,11 @@ class FamilyTree(db.Model):
         back_populates="family_tree",
         cascade="all, delete-orphan",
     )
+    members = db.relationship(
+        "Member",
+        back_populates="family_tree",
+        cascade="all, delete-orphan",
+    )
 
 
 class FamilyTreeCollaborator(db.Model):
@@ -91,3 +96,30 @@ class FamilyTreeCollaborator(db.Model):
 
     family_tree = db.relationship("FamilyTree", back_populates="collaborators")
     user = db.relationship("User", back_populates="family_tree_collaborations")
+
+
+class Member(db.Model):
+    __tablename__ = "members"
+
+    id = db.Column(
+        db.BigInteger().with_variant(db.Integer, "sqlite"),
+        primary_key=True,
+    )
+    family_tree_id = db.Column(
+        db.BigInteger().with_variant(db.Integer, "sqlite"),
+        db.ForeignKey("family_trees.id"),
+        nullable=False,
+    )
+    name = db.Column(db.Text, nullable=False)
+    gender = db.Column(db.Text, nullable=False, default="unknown")
+    birth_year = db.Column(db.Integer)
+    death_year = db.Column(db.Integer)
+    generation = db.Column(db.Integer)
+    biography = db.Column(db.Text, nullable=False, default="")
+    created_at = db.Column(
+        db.DateTime(timezone=True),
+        nullable=False,
+        server_default=db.func.now(),
+    )
+
+    family_tree = db.relationship("FamilyTree", back_populates="members")

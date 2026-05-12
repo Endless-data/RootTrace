@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Edit Member - {{ member.name }}</h2>
+  {% if error %}
+    <p role="alert">{{ error }}</p>
+  {% endif %}
+  <form method="post">
+    <label for="name">Name</label>
+    <input id="name" name="name" value="{{ member.name }}" required>
+
+    <label for="gender">Gender</label>
+    <select id="gender" name="gender">
+      {% for value in ["unknown", "male", "female"] %}
+        <option value="{{ value }}" {% if member.gender == value %}selected{% endif %}>
+          {{ value }}
+        </option>
+      {% endfor %}
+    </select>
+
+    <label for="birth_year">Birth year</label>
+    <input id="birth_year" name="birth_year" value="{{ member.birth_year or '' }}" inputmode="numeric">
+
+    <label for="death_year">Death year</label>
+    <input id="death_year" name="death_year" value="{{ member.death_year or '' }}" inputmode="numeric">
+
+    <label for="generation">Generation</label>
+    <input id="generation" name="generation" value="{{ member.generation or '' }}" inputmode="numeric">
+
+    <label for="biography">Biography</label>
+    <textarea id="biography" name="biography">{{ member.biography }}</textarea>
+
+    <button type="submit">Save</button>
+  </form>
+{% endblock %}

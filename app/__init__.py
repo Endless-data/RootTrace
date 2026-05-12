@@ -31,4 +31,8 @@ def create_app(test_config=None):
 
     app.register_blueprint(family_trees_bp)
 
+    from .members import bp as members_bp
+
+    app.register_blueprint(members_bp)
+
     return app

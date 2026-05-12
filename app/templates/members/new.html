@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Create Member - {{ family_tree.name }}</h2>
+  {% if error %}
+    <p role="alert">{{ error }}</p>
+  {% endif %}
+  <form method="post">
+    <label for="name">Name</label>
+    <input id="name" name="name" required>
+
+    <label for="gender">Gender</label>
+    <select id="gender" name="gender">
+      <option value="unknown">unknown</option>
+      <option value="male">male</option>
+      <option value="female">female</option>
+    </select>
+
+    <label for="birth_year">Birth year</label>
+    <input id="birth_year" name="birth_year" inputmode="numeric">
+
+    <label for="death_year">Death year</label>
+    <input id="death_year" name="death_year" inputmode="numeric">
+
+    <label for="generation">Generation</label>
+    <input id="generation" name="generation" inputmode="numeric">
+
+    <label for="biography">Biography</label>
+    <textarea id="biography" name="biography"></textarea>
+
+    <button type="submit">Create</button>
+  </form>
+{% endblock %}
