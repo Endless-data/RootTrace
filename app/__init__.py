@@ -47,4 +47,8 @@ def create_app(test_config=None):
 
     app.register_blueprint(ancestors_bp)
 
+    from .relationship_paths import bp as relationship_paths_bp
+
+    app.register_blueprint(relationship_paths_bp)
+
     return app

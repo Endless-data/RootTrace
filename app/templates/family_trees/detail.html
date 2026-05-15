@@ -26,6 +26,7 @@
   <p><a href="{{ url_for('members.index', tree_id=family_tree.id) }}">Members</a></p>
   <p><a href="{{ url_for('tree_preview.index', tree_id=family_tree.id) }}">Tree Preview</a></p>
   <p><a href="{{ url_for('ancestors.index', tree_id=family_tree.id) }}">Ancestor Query</a></p>
+  <p><a href="{{ url_for('relationship_paths.index', tree_id=family_tree.id) }}">Relationship Path Query</a></p>
 
   <h3>Collaborators</h3>
   {% if family_tree.collaborators %}

@@ -21,6 +21,7 @@
     <a href="{{ url_for('members.edit', tree_id=family_tree.id, member_id=member.id) }}">Edit</a>
     <a href="{{ url_for('relationships.detail', tree_id=family_tree.id, member_id=member.id) }}">Relationships</a>
     <a href="{{ url_for('ancestors.index', tree_id=family_tree.id, member_id=member.id) }}">Ancestors</a>
+    <a href="{{ url_for('relationship_paths.index', tree_id=family_tree.id, source_member_id=member.id) }}">Find Relationship Path</a>
   </p>
   <form action="{{ url_for('members.delete', tree_id=family_tree.id, member_id=member.id) }}" method="post">
     <button type="submit">Delete</button>

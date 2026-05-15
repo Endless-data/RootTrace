@@ -363,17 +363,28 @@ Goal:
 - Implement relationship path lookup between two member IDs.
 
 File scope:
-- TODO: relationship path SQL/service files.
-- TODO: relationship path route/controller/view files.
-- TODO: relationship path tests.
+- `app/__init__.py`
+- `app/relationship_paths.py`
+- `app/templates/relationship_paths/index.html`
+- `app/templates/family_trees/detail.html`
+- `app/templates/members/detail.html`
+- `tests/test_relationship_paths.py`
+- `README.md`
+- `PLANS.md`
 
 Verification command:
-- TODO: fastest relevant relationship path test command.
+- `uv sync --dev`
+- `uv run pytest`
+- `uv run flask --app app routes`
+- `git status --short`
 
 Completion standard:
 - Given two member IDs, the system reports whether a relationship path exists.
 - If a path exists, the system displays the chain.
 - Duplicate names do not affect correctness because IDs are used.
+- Path search includes parent-child and marriage relationships as bidirectional graph edges.
+- Relationship path lookup is scoped to an accessible family tree.
+- No SQL deliverables or Recursive CTE files are implemented.
 
 Recommended commit message:
 - `feat: add relationship path query`
@@ -508,7 +519,9 @@ Recommended commit message:
 - Milestone 6 member CRUD and fuzzy member search have been implemented.
 - Milestone 7 direct parent-child and marriage relationship management has been implemented.
 - Milestone 8 dashboard statistics and descendant tree preview have been implemented.
-- No ancestor query or relationship path query has been implemented yet.
+- Milestone 9 ancestor query has been implemented.
+- Milestone 10 relationship path query has been implemented.
+- No large-scale simulated data, SQL query deliverables, index experiment, or final report has been implemented yet.
 
 ## Progress Log
 
@@ -523,6 +536,8 @@ Recommended commit message:
 - 2026-05-12: Created Milestone 6 member CRUD, scoped fuzzy search, and member access-control tests.
 - 2026-05-12: Created Milestone 7 parent-child and marriage relationship management tests.
 - 2026-05-12: Created Milestone 8 dashboard statistics and descendant tree preview tests.
+- 2026-05-13: Created Milestone 9 ancestor query page and tests.
+- 2026-05-15: Created Milestone 10 relationship path query page and tests.
 
 ## Open Questions
 

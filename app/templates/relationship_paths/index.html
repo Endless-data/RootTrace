@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Relationship Path - {{ family_tree.name }}</h2>
+  <form method="get">
+    <label for="source_member_id">Source member ID</label>
+    <input id="source_member_id" name="source_member_id" value="{{ source_member_id }}" required>
+
+    <label for="target_member_id">Target member ID</label>
+    <input id="target_member_id" name="target_member_id" value="{{ target_member_id }}" required>
+
+    <button type="submit">Find path</button>
+  </form>
+
+  {% if submitted %}
+    {% if source.id == target.id %}
+      <p>Same member: {{ source.name }} (#{{ source.id }})</p>
+    {% elif path %}
+      <h3>Path found</h3>
+      <ol>
+        {% for step in path %}
+          <li>
+            {{ step.from.name }} (#{{ step.from.id }})
+            --{{ step.label }}--&gt;
+            {{ step.to.name }} (#{{ step.to.id }})
+          </li>
+        {% endfor %}
+      </ol>
+    {% else %}
+      <p>No relationship path found.</p>
+    {% endif %}
+  {% else %}
+    <p>Enter two member IDs to find a relationship path.</p>
+  {% endif %}
+{% endblock %}
