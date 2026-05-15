@@ -395,11 +395,19 @@ Goal:
 - Add standalone SQL statements for the experiment's required queries.
 
 File scope:
-- TODO: SQL deliverables directory.
-- TODO: query documentation path.
+- `sql/queries/required_queries.sql`
+- `docs/sql-queries.md`
+- `tests/test_sql_deliverables.py`
+- `README.md`
+- `PLANS.md`
 
 Verification command:
-- TODO: database-specific SQL execution command.
+- `uv run pytest tests/test_sql_deliverables.py`
+- `uv run pytest`
+- `docker compose up -d db`
+- `docker compose exec -T db psql -U roottrace -d roottrace -f /schema/schema.sql`
+- `docker compose exec -T db psql -U roottrace -d roottrace -f /schema/queries/required_queries.sql`
+- `git status --short`
 
 Completion standard:
 - SQL exists for spouse and children lookup.
@@ -408,6 +416,8 @@ Completion standard:
 - SQL exists for male members over 50 without spouse.
 - SQL exists for members born earlier than their generation average.
 - Each requirement is implemented with one SQL statement where required.
+- SQL uses PostgreSQL syntax and can be executed by psql after loading `sql/schema.sql`.
+- Documentation explains the purpose, parameters, and output fields for each query.
 
 Recommended commit message:
 - `feat: add required sql queries`
@@ -521,7 +531,8 @@ Recommended commit message:
 - Milestone 8 dashboard statistics and descendant tree preview have been implemented.
 - Milestone 9 ancestor query has been implemented.
 - Milestone 10 relationship path query has been implemented.
-- No large-scale simulated data, SQL query deliverables, index experiment, or final report has been implemented yet.
+- Milestone 11 required SQL deliverables have been implemented.
+- No large-scale simulated data, index experiment, or final report has been implemented yet.
 
 ## Progress Log
 
@@ -538,6 +549,7 @@ Recommended commit message:
 - 2026-05-12: Created Milestone 8 dashboard statistics and descendant tree preview tests.
 - 2026-05-13: Created Milestone 9 ancestor query page and tests.
 - 2026-05-15: Created Milestone 10 relationship path query page and tests.
+- 2026-05-15: Created Milestone 11 required SQL queries and query documentation.
 
 ## Open Questions
 

@@ -2,7 +2,7 @@
 
 RootTrace is a genealogy management system project based on `docs/实验内容.md`.
 
-The project has completed Milestone 10: relationship path query. The app supports local user registration, login, family tree creation, collaborator access control, member management, direct relationships, dashboard stats, descendant tree preview, ancestor lookup, and relationship path lookup.
+The project has completed Milestone 11: required SQL deliverables. The app supports local user registration, login, family tree creation, collaborator access control, member management, direct relationships, dashboard stats, descendant tree preview, ancestor lookup, and relationship path lookup.
 
 ## Technical Baseline
 
@@ -17,7 +17,7 @@ The project has completed Milestone 10: relationship path query. The app support
 
 ## Current Development Rule
 
-Follow `AGENTS.md` and `PLANS.md` before implementation. Work on one milestone at a time, and do not start Milestone 11 until its implementation plan is reviewed.
+Follow `AGENTS.md` and `PLANS.md` before implementation. Work on one milestone at a time, and do not start Milestone 12 until its implementation plan is reviewed.
 
 ## Verification
 
@@ -45,6 +45,8 @@ The default `DATABASE_URL` is only a local placeholder. Real database credential
 - Design document: `docs/database-design.md`
 - Mermaid ER source: `docs/er.mmd`
 - PostgreSQL DDL: `sql/schema.sql`
+- Required SQL queries: `sql/queries/required_queries.sql`
+- SQL query explanation: `docs/sql-queries.md`
 - Local PostgreSQL service: `compose.yaml`
 
 ## Authentication
