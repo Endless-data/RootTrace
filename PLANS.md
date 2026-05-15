@@ -331,17 +331,28 @@ Goal:
 - Implement ancestor lookup by member ID.
 
 File scope:
-- TODO: ancestor query SQL/service files.
-- TODO: ancestor route/controller/view files.
-- TODO: ancestor tests.
+- `app/__init__.py`
+- `app/ancestors.py`
+- `app/templates/ancestors/index.html`
+- `app/templates/family_trees/detail.html`
+- `app/templates/members/detail.html`
+- `tests/test_ancestors.py`
+- `README.md`
+- `PLANS.md`
 
 Verification command:
-- TODO: fastest relevant ancestor query test command.
+- `uv sync --dev`
+- `uv run pytest`
+- `uv run flask --app app routes`
+- `git status --short`
 
 Completion standard:
 - Given a member ID, the system returns all known ancestors above the parent generation.
 - The result preserves generation depth or tree order.
 - The query works for unknown depth using a recursive strategy where the selected database supports it.
+- Ancestor query is scoped to an accessible family tree.
+- Duplicate member names are disambiguated by member ID.
+- No relationship path query or SQL deliverable is implemented.
 
 Recommended commit message:
 - `feat: add ancestor query`

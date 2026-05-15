@@ -2,7 +2,7 @@
 
 RootTrace is a genealogy management system project based on `docs/实验内容.md`.
 
-The project is currently in Milestone 8: dashboard and tree preview. The app supports local user registration, login, family tree creation, collaborator access control, member management, direct relationships, dashboard stats, and descendant tree preview.
+The project is currently in Milestone 9: ancestor query. The app supports local user registration, login, family tree creation, collaborator access control, member management, direct relationships, dashboard stats, descendant tree preview, and ancestor lookup.
 
 ## Technical Baseline
 
@@ -17,7 +17,7 @@ The project is currently in Milestone 8: dashboard and tree preview. The app sup
 
 ## Current Development Rule
 
-Follow `AGENTS.md` and `PLANS.md` before implementation. Work on one milestone at a time, and do not start Milestone 9 until Milestone 8 is complete and verified.
+Follow `AGENTS.md` and `PLANS.md` before implementation. Work on one milestone at a time, and do not start Milestone 10 until Milestone 9 is complete and verified.
 
 ## Verification
 
@@ -79,3 +79,7 @@ The default `DATABASE_URL` is only a local placeholder. Real database credential
 
 - Dashboard stats are shown on `/family-trees/<tree_id>`
 - Descendant tree preview: `/family-trees/<tree_id>/tree-preview?root_member_id=<member_id>`
+
+## Ancestors
+
+- Ancestor query: `/family-trees/<tree_id>/ancestors?member_id=<member_id>`

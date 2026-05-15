@@ -43,4 +43,8 @@ def create_app(test_config=None):
 
     app.register_blueprint(tree_preview_bp)
 
+    from .ancestors import bp as ancestors_bp
+
+    app.register_blueprint(ancestors_bp)
+
     return app
