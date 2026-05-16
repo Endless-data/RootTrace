@@ -615,6 +615,7 @@ Completion standard:
 - Text does not overflow buttons, tables, cards, or query result sections.
 - The main demo path is documented in Chinese.
 - All tests pass.
+- UI-4 has been implemented.
 
 Recommended commit message:
 - `docs: add frontend demo checklist`
@@ -689,7 +690,7 @@ Recommended commit message:
 - UI-1 visual foundation and layout has been implemented.
 - UI-2 core workflow pages have been implemented.
 - UI-3 genealogy query experience has been implemented.
-- UI-4 has not been implemented yet.
+- UI-4 frontend polish and demo readiness has been implemented.
 - No index experiment or final report has been implemented yet.
 
 ## Progress Log
@@ -714,6 +715,7 @@ Recommended commit message:
 - 2026-05-16: Created UI-1 visual foundation, shared layout, and HTML home page.
 - 2026-05-16: Improved UI-2 authentication, family tree, and member workflow pages.
 - 2026-05-16: Improved UI-3 relationship management and genealogy query pages.
+- 2026-05-16: Completed UI-4 frontend polish and Chinese demo guide.
 
 ## Open Questions
 

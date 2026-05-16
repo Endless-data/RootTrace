@@ -94,6 +94,7 @@ The exported branch CSV is written to `exports/branch_export.csv` and ignored by
 - Shared stylesheet: `app/static/css/app.css`
 - UI-2 improves authentication, family tree, and member management pages.
 - UI-3 improves relationship management and genealogy query pages.
+- Frontend demo guide: `docs/frontend-demo.md`
 
 ## Authentication
 
