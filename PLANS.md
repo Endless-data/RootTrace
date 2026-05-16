@@ -428,12 +428,21 @@ Goal:
 - Generate demonstrable large-scale genealogy data according to the experiment constraints.
 
 File scope:
-- TODO: data generation script path.
-- TODO: generated data output path.
-- TODO: data generation tests or validation script.
+- `scripts/generate_simulated_data.py`
+- `scripts/validate_simulated_data.py`
+- `tests/test_data_generation.py`
+- `docs/data-generation.md`
+- `data/generated/README.md`
+- `.gitignore`
+- `README.md`
+- `PLANS.md`
 
 Verification command:
-- TODO: data validation command.
+- `uv run pytest tests/test_data_generation.py`
+- `uv run pytest`
+- `uv run python scripts/generate_simulated_data.py --output data/generated --seed 20260516`
+- `uv run python scripts/validate_simulated_data.py data/generated`
+- `git status --short`
 
 Completion standard:
 - At least 10 family trees can be generated.
@@ -442,6 +451,8 @@ Completion standard:
 - Each family tree contains related members.
 - At least one family tree has at least 30 generations.
 - Generated outputs are documented and reproducible.
+- Generated CSV and manifest outputs are ignored by git.
+- The generator and validator use the current PostgreSQL schema column names.
 
 Recommended commit message:
 - `feat: add simulated genealogy data generator`
@@ -532,7 +543,8 @@ Recommended commit message:
 - Milestone 9 ancestor query has been implemented.
 - Milestone 10 relationship path query has been implemented.
 - Milestone 11 required SQL deliverables have been implemented.
-- No large-scale simulated data, index experiment, or final report has been implemented yet.
+- Milestone 12 simulated data generator has been implemented.
+- No import/export workflow, index experiment, or final report has been implemented yet.
 
 ## Progress Log
 
@@ -550,6 +562,7 @@ Recommended commit message:
 - 2026-05-13: Created Milestone 9 ancestor query page and tests.
 - 2026-05-15: Created Milestone 10 relationship path query page and tests.
 - 2026-05-15: Created Milestone 11 required SQL queries and query documentation.
+- 2026-05-16: Created Milestone 12 simulated data generator, validator, and documentation.
 
 ## Open Questions
 

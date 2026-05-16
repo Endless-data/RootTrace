@@ -58,7 +58,19 @@ Flask loads `.env` automatically through `python-dotenv`. If `SECRET_KEY` is not
 - PostgreSQL DDL: `sql/schema.sql`
 - Required SQL queries: `sql/queries/required_queries.sql`
 - SQL query explanation: `docs/sql-queries.md`
+- Simulated data generation: `docs/data-generation.md`
 - Local PostgreSQL service: `compose.yaml`
+
+## Simulated Data
+
+Generate full experiment-scale CSV data locally:
+
+```bash
+uv run python scripts/generate_simulated_data.py --output data/generated --seed 20260516
+uv run python scripts/validate_simulated_data.py data/generated
+```
+
+Generated CSV files are ignored by git.
 
 ## Authentication
 
