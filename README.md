@@ -11,6 +11,7 @@ The project has completed Milestone 11: required SQL deliverables. The app suppo
 - Database: PostgreSQL
 - Database access: SQLAlchemy
 - UI approach: Flask server-rendered HTML templates
+- UI foundation: local CSS in `app/static/css/app.css`
 - Test framework: pytest
 - Data generation: Python scripts
 - Report format: Markdown first
@@ -85,6 +86,12 @@ docker compose exec -T db psql -U roottrace -d roottrace -f /schema/export_branc
 ```
 
 The exported branch CSV is written to `exports/branch_export.csv` and ignored by git.
+
+## Frontend
+
+- Home page: `/`
+- Shared layout: `app/templates/base.html`
+- Shared stylesheet: `app/static/css/app.css`
 
 ## Authentication
 

@@ -525,6 +525,7 @@ Completion standard:
 - The UI remains based on Flask server-rendered HTML templates.
 - No external CDN, frontend framework, or network resource is introduced.
 - All tests pass.
+- UI-1 has been implemented.
 
 Recommended commit message:
 - `style: add frontend visual foundation`
@@ -683,7 +684,8 @@ Recommended commit message:
 - Milestone 11 required SQL deliverables have been implemented.
 - Milestone 12 simulated data generator has been implemented.
 - Milestone 13 import/export workflow has been implemented.
-- Frontend optimization track has been planned but not implemented yet.
+- UI-1 visual foundation and layout has been implemented.
+- UI-2 through UI-4 have not been implemented yet.
 - No index experiment or final report has been implemented yet.
 
 ## Progress Log
@@ -705,6 +707,7 @@ Recommended commit message:
 - 2026-05-16: Created Milestone 12 simulated data generator, validator, and documentation.
 - 2026-05-16: Created Milestone 13 PostgreSQL import/export workflow documentation and SQL.
 - 2026-05-16: Added frontend optimization track to the roadmap.
+- 2026-05-16: Created UI-1 visual foundation, shared layout, and HTML home page.
 
 ## Open Questions
 

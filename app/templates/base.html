@@ -4,24 +4,32 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>RootTrace</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
   </head>
   <body>
-    <header>
-      <h1>RootTrace</h1>
-      <nav>
-        {% if g.user %}
-          <span>{{ g.user.display_name }}</span>
-          <a href="{{ url_for('family_trees.index') }}">Family Trees</a>
-          <form action="{{ url_for('auth.logout') }}" method="post">
-            <button type="submit">Logout</button>
-          </form>
-        {% else %}
-          <a href="{{ url_for('auth.register') }}">Register</a>
-          <a href="{{ url_for('auth.login') }}">Login</a>
-        {% endif %}
-      </nav>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="brand" href="{{ url_for('main.index') }}">
+          <span class="brand__name">RootTrace</span>
+          <span class="brand__tagline">Genealogy management system</span>
+        </a>
+        <nav class="site-nav" aria-label="Primary navigation">
+          {% if g.user %}
+            <span class="user-label">{{ g.user.display_name }}</span>
+            <a href="{{ url_for('family_trees.index') }}">Family Trees</a>
+            <form action="{{ url_for('auth.logout') }}" method="post">
+              <button type="submit">Logout</button>
+            </form>
+          {% else %}
+            <a href="{{ url_for('auth.register') }}">Register</a>
+            <a href="{{ url_for('auth.login') }}">Login</a>
+          {% endif %}
+        </nav>
+      </div>
     </header>
 
-    {% block content %}{% endblock %}
+    <main class="page">
+      {% block content %}{% endblock %}
+    </main>
   </body>
 </html>

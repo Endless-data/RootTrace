@@ -14,4 +14,6 @@ def test_index_route():
     response = client.get("/")
 
     assert response.status_code == 200
-    assert response.get_json() == {"name": "RootTrace", "status": "ok"}
+    assert response.content_type.startswith("text/html")
+    assert b"RootTrace Genealogy Management" in response.data
+    assert b"Create account" in response.data
