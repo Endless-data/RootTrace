@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h2>Edit Member - {{ member.name }}</h2>
+  <div class="page-header">
+    <div>
+      <h2>Edit Member - {{ member.name }}</h2>
+      <p>Update member profile and life information.</p>
+    </div>
+  </div>
   {% if error %}
     <p role="alert">{{ error }}</p>
   {% endif %}

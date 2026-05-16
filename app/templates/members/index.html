@@ -1,43 +1,52 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h2>Members - {{ family_tree.name }}</h2>
-  <p><a href="{{ url_for('members.create', tree_id=family_tree.id) }}">Create member</a></p>
+  <div class="page-header">
+    <div>
+      <h2>Members - {{ family_tree.name }}</h2>
+      <p>Search and manage members in this family tree.</p>
+    </div>
+    <a class="button" href="{{ url_for('members.create', tree_id=family_tree.id) }}">Create member</a>
+  </div>
 
-  <form method="get">
-    <label for="q">Search by name</label>
-    <input id="q" name="q" value="{{ query }}">
-    <button type="submit">Search</button>
-  </form>
+  <div class="toolbar">
+    <form method="get">
+      <label for="q">Search by name</label>
+      <input id="q" name="q" value="{{ query }}">
+      <button type="submit">Search</button>
+    </form>
+  </div>
 
   {% if members %}
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Gender</th>
-          <th>Generation</th>
-          <th>Years</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for member in members %}
+    <div class="table-panel">
+      <table>
+        <thead>
           <tr>
-            <td>{{ member.id }}</td>
-            <td>
-              <a href="{{ url_for('members.detail', tree_id=family_tree.id, member_id=member.id) }}">
-                {{ member.name }}
-              </a>
-            </td>
-            <td>{{ member.gender }}</td>
-            <td>{{ member.generation or "Not set" }}</td>
-            <td>{{ member.birth_year or "?" }} - {{ member.death_year or "?" }}</td>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Generation</th>
+            <th>Years</th>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {% for member in members %}
+            <tr>
+              <td>{{ member.id }}</td>
+              <td>
+                <a href="{{ url_for('members.detail', tree_id=family_tree.id, member_id=member.id) }}">
+                  {{ member.name }}
+                </a>
+              </td>
+              <td>{{ member.gender }}</td>
+              <td>{{ member.generation or "Not set" }}</td>
+              <td>{{ member.birth_year or "?" }} - {{ member.death_year or "?" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   {% else %}
-    <p>No members found.</p>
+    <p class="empty-state">No members found.</p>
   {% endif %}
 {% endblock %}

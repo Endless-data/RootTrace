@@ -4,7 +4,7 @@
   <li>
     {{ node.member.name }} (#{{ node.member.id }}, {{ node.member.gender }}, generation {{ node.member.generation or "?" }})
     {% if node.repeated %}
-      <span>cycle detected</span>
+      <span class="badge badge-warning">cycle detected</span>
     {% elif node.parents %}
       <ul>
         {% for parent in node.parents %}
@@ -16,26 +16,31 @@
 {% endmacro %}
 
 {% block content %}
-  <h2>Ancestor Query - {{ family_tree.name }}</h2>
-  <form method="get">
-    <label for="member_id">Member ID</label>
-    <input id="member_id" name="member_id" value="{{ member_id }}" required>
-    <button type="submit">Query</button>
-  </form>
+  <div class="page-header">
+    <div>
+      <h2>Ancestor Query - {{ family_tree.name }}</h2>
+      <p>Trace parents and earlier ancestors for one member.</p>
+    </div>
+  </div>
+  <section class="card query-panel">
+    <form method="get">
+      <label for="member_id">Member ID</label>
+      <input id="member_id" name="member_id" value="{{ member_id }}" required>
+      <button type="submit">Query</button>
+    </form>
+  </section>
 
   {% if tree %}
-    <h3>Ancestors of {{ member.name }} (#{{ member.id }})</h3>
-    {% if tree.parents %}
-      <ul>
+    <section class="card result-panel">
+      <h3>Ancestors of {{ member.name }} (#{{ member.id }})</h3>
+      {% if not tree.parents %}
+        <p class="empty-state">No known ancestors.</p>
+      {% endif %}
+      <ul class="tree-list">
         {{ render_node(tree) }}
       </ul>
-    {% else %}
-      <p>No known ancestors.</p>
-      <ul>
-        {{ render_node(tree) }}
-      </ul>
-    {% endif %}
+    </section>
   {% else %}
-    <p>Enter a member ID to query ancestors.</p>
+    <p class="empty-state">Enter a member ID to query ancestors.</p>
   {% endif %}
 {% endblock %}

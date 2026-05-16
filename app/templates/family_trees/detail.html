@@ -1,53 +1,77 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h2>{{ family_tree.name }}</h2>
-  <dl>
-    <dt>Surname</dt>
-    <dd>{{ family_tree.surname }}</dd>
-    <dt>Revision date</dt>
-    <dd>{{ family_tree.revision_time or "Not set" }}</dd>
-    <dt>Creator</dt>
-    <dd>{{ family_tree.creator.display_name }}</dd>
-  </dl>
+  <div class="page-header">
+    <div>
+      <h2>{{ family_tree.name }}</h2>
+      <p>{{ family_tree.surname }} genealogy record</p>
+    </div>
+    <a class="button" href="{{ url_for('members.index', tree_id=family_tree.id) }}">Manage members</a>
+  </div>
 
   <h3>Dashboard</h3>
-  <dl>
-    <dt>Total members</dt>
-    <dd>{{ stats.total }}</dd>
-    <dt>Male</dt>
-    <dd>{{ stats.male }} ({{ stats.male_percent }})</dd>
-    <dt>Female</dt>
-    <dd>{{ stats.female }} ({{ stats.female_percent }})</dd>
-    <dt>Unknown</dt>
-    <dd>{{ stats.unknown }} ({{ stats.unknown_percent }})</dd>
-  </dl>
+  <div class="stat-grid">
+    <div class="stat">
+      <span class="stat__value">{{ stats.total }}</span>
+      <span class="stat__label">Total members</span>
+    </div>
+    <div class="stat">
+      <span class="stat__value">{{ stats.male }}</span>
+      <span class="stat__label">Male ({{ stats.male_percent }})</span>
+    </div>
+    <div class="stat">
+      <span class="stat__value">{{ stats.female }}</span>
+      <span class="stat__label">Female ({{ stats.female_percent }})</span>
+    </div>
+    <div class="stat">
+      <span class="stat__value">{{ stats.unknown }}</span>
+      <span class="stat__label">Unknown ({{ stats.unknown_percent }})</span>
+    </div>
+  </div>
 
-  <p><a href="{{ url_for('members.index', tree_id=family_tree.id) }}">Members</a></p>
-  <p><a href="{{ url_for('tree_preview.index', tree_id=family_tree.id) }}">Tree Preview</a></p>
-  <p><a href="{{ url_for('ancestors.index', tree_id=family_tree.id) }}">Ancestor Query</a></p>
-  <p><a href="{{ url_for('relationship_paths.index', tree_id=family_tree.id) }}">Relationship Path Query</a></p>
+  <section class="card">
+    <h3>Family Tree Details</h3>
+    <dl class="meta-list">
+      <dt>Surname</dt>
+      <dd>{{ family_tree.surname }}</dd>
+      <dt>Revision date</dt>
+      <dd>{{ family_tree.revision_time or "Not set" }}</dd>
+      <dt>Creator</dt>
+      <dd>{{ family_tree.creator.display_name }}</dd>
+    </dl>
+  </section>
 
-  <h3>Collaborators</h3>
-  {% if family_tree.collaborators %}
-    <ul>
-      {% for collaboration in family_tree.collaborators %}
-        <li>{{ collaboration.user.display_name }} ({{ collaboration.user.username }})</li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No collaborators.</p>
-  {% endif %}
+  <div class="card-grid">
+    <a class="card" href="{{ url_for('members.index', tree_id=family_tree.id) }}">Members</a>
+    <a class="card" href="{{ url_for('tree_preview.index', tree_id=family_tree.id) }}">Tree Preview</a>
+    <a class="card" href="{{ url_for('ancestors.index', tree_id=family_tree.id) }}">Ancestor Query</a>
+    <a class="card" href="{{ url_for('relationship_paths.index', tree_id=family_tree.id) }}">Relationship Path Query</a>
+  </div>
+
+  <section class="card">
+    <h3>Collaborators</h3>
+    {% if family_tree.collaborators %}
+      <ul>
+        {% for collaboration in family_tree.collaborators %}
+          <li>{{ collaboration.user.display_name }} ({{ collaboration.user.username }})</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="empty-state">No collaborators.</p>
+    {% endif %}
+  </section>
 
   {% if g.user and g.user.id == family_tree.created_by_user_id %}
-    <h3>Invite Collaborator</h3>
-    {% if error %}
-      <p role="alert">{{ error }}</p>
-    {% endif %}
-    <form action="{{ url_for('family_trees.add_collaborator', tree_id=family_tree.id) }}" method="post">
-      <label for="username">Username</label>
-      <input id="username" name="username" required>
-      <button type="submit">Invite</button>
-    </form>
+    <section class="card">
+      <h3>Invite Collaborator</h3>
+      {% if error %}
+        <p role="alert">{{ error }}</p>
+      {% endif %}
+      <form action="{{ url_for('family_trees.add_collaborator', tree_id=family_tree.id) }}" method="post">
+        <label for="username">Username</label>
+        <input id="username" name="username" required>
+        <button type="submit">Invite</button>
+      </form>
+    </section>
   {% endif %}
 {% endblock %}

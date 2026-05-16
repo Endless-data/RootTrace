@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h2>Create Member - {{ family_tree.name }}</h2>
+  <div class="page-header">
+    <div>
+      <h2>Create Member - {{ family_tree.name }}</h2>
+      <p>Add a person to this family tree.</p>
+    </div>
+  </div>
   {% if error %}
     <p role="alert">{{ error }}</p>
   {% endif %}

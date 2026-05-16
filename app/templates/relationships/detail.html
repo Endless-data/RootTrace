@@ -1,101 +1,121 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h2>Relationships - {{ member.name }} (#{{ member.id }})</h2>
+  <div class="page-header">
+    <div>
+      <h2>Relationships - {{ member.name }} (#{{ member.id }})</h2>
+      <p>Manage parent-child and marriage relationships.</p>
+    </div>
+    <a class="button-secondary button" href="{{ url_for('members.detail', tree_id=family_tree.id, member_id=member.id) }}">Back to member</a>
+  </div>
   {% if error %}
     <p role="alert">{{ error }}</p>
   {% endif %}
 
-  <h3>Parents</h3>
-  {% if member.parent_relationships %}
-    <ul>
-      {% for relationship in member.parent_relationships %}
-        <li>
-          {{ relationship.relationship_type }}:
-          <a href="{{ url_for('members.detail', tree_id=family_tree.id, member_id=relationship.parent.id) }}">
-            {{ relationship.parent.name }} (#{{ relationship.parent.id }})
-          </a>
-          <form action="{{ url_for('relationships.delete_parent_child', tree_id=family_tree.id, relationship_id=relationship.id) }}" method="post">
-            <button type="submit">Delete</button>
-          </form>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No parents.</p>
-  {% endif %}
+  <div class="section-grid">
+    <section class="card">
+      <h3>Parents</h3>
+      {% if member.parent_relationships %}
+        <ul class="relationship-list">
+          {% for relationship in member.parent_relationships %}
+            <li>
+              <span>
+                <span class="badge">{{ relationship.relationship_type }}</span>
+                <a href="{{ url_for('members.detail', tree_id=family_tree.id, member_id=relationship.parent.id) }}">
+                  {{ relationship.parent.name }} (#{{ relationship.parent.id }})
+                </a>
+              </span>
+              <form class="inline-form" action="{{ url_for('relationships.delete_parent_child', tree_id=family_tree.id, relationship_id=relationship.id) }}" method="post">
+                <button class="button-danger" type="submit">Delete</button>
+              </form>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="empty-state">No parents.</p>
+      {% endif %}
 
-  <h4>Add Parent</h4>
-  <form action="{{ url_for('relationships.add_parent', tree_id=family_tree.id, member_id=member.id) }}" method="post">
-    <label for="parent_id">Parent member ID</label>
-    <input id="parent_id" name="parent_id" required>
-    <label for="parent_relationship_type">Type</label>
-    <select id="parent_relationship_type" name="relationship_type">
-      <option value="father">father</option>
-      <option value="mother">mother</option>
-    </select>
-    <button type="submit">Add parent</button>
-  </form>
+      <h4>Add Parent</h4>
+      <form action="{{ url_for('relationships.add_parent', tree_id=family_tree.id, member_id=member.id) }}" method="post">
+        <label for="parent_id">Parent member ID</label>
+        <input id="parent_id" name="parent_id" required>
+        <label for="parent_relationship_type">Type</label>
+        <select id="parent_relationship_type" name="relationship_type">
+          <option value="father">father</option>
+          <option value="mother">mother</option>
+        </select>
+        <button type="submit">Add parent</button>
+      </form>
+    </section>
 
-  <h3>Children</h3>
-  {% if member.child_relationships %}
-    <ul>
-      {% for relationship in member.child_relationships %}
-        <li>
-          {{ relationship.relationship_type }} of
-          <a href="{{ url_for('members.detail', tree_id=family_tree.id, member_id=relationship.child.id) }}">
-            {{ relationship.child.name }} (#{{ relationship.child.id }})
-          </a>
-          <form action="{{ url_for('relationships.delete_parent_child', tree_id=family_tree.id, relationship_id=relationship.id) }}" method="post">
-            <button type="submit">Delete</button>
-          </form>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No children.</p>
-  {% endif %}
+    <section class="card">
+      <h3>Children</h3>
+      {% if member.child_relationships %}
+        <ul class="relationship-list">
+          {% for relationship in member.child_relationships %}
+            <li>
+              <span>
+                <span class="badge">{{ relationship.relationship_type }} of</span>
+                <a href="{{ url_for('members.detail', tree_id=family_tree.id, member_id=relationship.child.id) }}">
+                  {{ relationship.child.name }} (#{{ relationship.child.id }})
+                </a>
+              </span>
+              <form class="inline-form" action="{{ url_for('relationships.delete_parent_child', tree_id=family_tree.id, relationship_id=relationship.id) }}" method="post">
+                <button class="button-danger" type="submit">Delete</button>
+              </form>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="empty-state">No children.</p>
+      {% endif %}
 
-  <h4>Add Child</h4>
-  <form action="{{ url_for('relationships.add_child', tree_id=family_tree.id, member_id=member.id) }}" method="post">
-    <label for="child_id">Child member ID</label>
-    <input id="child_id" name="child_id" required>
-    <label for="child_relationship_type">Type</label>
-    <select id="child_relationship_type" name="relationship_type">
-      <option value="father">father</option>
-      <option value="mother">mother</option>
-    </select>
-    <button type="submit">Add child</button>
-  </form>
+      <h4>Add Child</h4>
+      <form action="{{ url_for('relationships.add_child', tree_id=family_tree.id, member_id=member.id) }}" method="post">
+        <label for="child_id">Child member ID</label>
+        <input id="child_id" name="child_id" required>
+        <label for="child_relationship_type">Type</label>
+        <select id="child_relationship_type" name="relationship_type">
+          <option value="father">father</option>
+          <option value="mother">mother</option>
+        </select>
+        <button type="submit">Add child</button>
+      </form>
+    </section>
 
-  <h3>Spouses</h3>
-  {% if marriages %}
-    <ul>
-      {% for marriage in marriages %}
-        {% set spouse = spouse_for(marriage, member) %}
-        <li>
-          <a href="{{ url_for('members.detail', tree_id=family_tree.id, member_id=spouse.id) }}">
-            {{ spouse.name }} (#{{ spouse.id }})
-          </a>
-          {{ marriage.start_year or "?" }} - {{ marriage.end_year or "?" }}
-          <form action="{{ url_for('relationships.delete_marriage', tree_id=family_tree.id, relationship_id=marriage.id) }}" method="post">
-            <button type="submit">Delete</button>
-          </form>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No spouses.</p>
-  {% endif %}
+    <section class="card">
+      <h3>Spouses</h3>
+      {% if marriages %}
+        <ul class="relationship-list">
+          {% for marriage in marriages %}
+            {% set spouse = spouse_for(marriage, member) %}
+            <li>
+              <span>
+                <a href="{{ url_for('members.detail', tree_id=family_tree.id, member_id=spouse.id) }}">
+                  {{ spouse.name }} (#{{ spouse.id }})
+                </a>
+                <span class="badge">{{ marriage.start_year or "?" }} - {{ marriage.end_year or "?" }}</span>
+              </span>
+              <form class="inline-form" action="{{ url_for('relationships.delete_marriage', tree_id=family_tree.id, relationship_id=marriage.id) }}" method="post">
+                <button class="button-danger" type="submit">Delete</button>
+              </form>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="empty-state">No spouses.</p>
+      {% endif %}
 
-  <h4>Add Spouse</h4>
-  <form action="{{ url_for('relationships.add_marriage', tree_id=family_tree.id, member_id=member.id) }}" method="post">
-    <label for="spouse_id">Spouse member ID</label>
-    <input id="spouse_id" name="spouse_id" required>
-    <label for="start_year">Start year</label>
-    <input id="start_year" name="start_year" inputmode="numeric">
-    <label for="end_year">End year</label>
-    <input id="end_year" name="end_year" inputmode="numeric">
-    <button type="submit">Add spouse</button>
-  </form>
+      <h4>Add Spouse</h4>
+      <form action="{{ url_for('relationships.add_marriage', tree_id=family_tree.id, member_id=member.id) }}" method="post">
+        <label for="spouse_id">Spouse member ID</label>
+        <input id="spouse_id" name="spouse_id" required>
+        <label for="start_year">Start year</label>
+        <input id="start_year" name="start_year" inputmode="numeric">
+        <label for="end_year">End year</label>
+        <input id="end_year" name="end_year" inputmode="numeric">
+        <button type="submit">Add spouse</button>
+      </form>
+    </section>
+  </div>
 {% endblock %}

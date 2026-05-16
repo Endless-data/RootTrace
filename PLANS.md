@@ -557,6 +557,7 @@ Completion standard:
 - Member list search and table presentation are easier to use.
 - Member detail actions have clear visual hierarchy.
 - Error messages and empty states are styled consistently.
+- UI-2 has been implemented.
 
 Recommended commit message:
 - `style: improve core workflow pages`
@@ -586,6 +587,7 @@ Completion standard:
 - Descendant tree, ancestor tree, and relationship path results are easier to read.
 - Query input, result, no-result, and cycle-warning states use consistent styling.
 - No complex graph canvas, drag-and-drop tree editor, or asynchronous search is introduced.
+- UI-3 has been implemented.
 
 Recommended commit message:
 - `style: improve genealogy query pages`
@@ -685,7 +687,9 @@ Recommended commit message:
 - Milestone 12 simulated data generator has been implemented.
 - Milestone 13 import/export workflow has been implemented.
 - UI-1 visual foundation and layout has been implemented.
-- UI-2 through UI-4 have not been implemented yet.
+- UI-2 core workflow pages have been implemented.
+- UI-3 genealogy query experience has been implemented.
+- UI-4 has not been implemented yet.
 - No index experiment or final report has been implemented yet.
 
 ## Progress Log
@@ -708,6 +712,8 @@ Recommended commit message:
 - 2026-05-16: Created Milestone 13 PostgreSQL import/export workflow documentation and SQL.
 - 2026-05-16: Added frontend optimization track to the roadmap.
 - 2026-05-16: Created UI-1 visual foundation, shared layout, and HTML home page.
+- 2026-05-16: Improved UI-2 authentication, family tree, and member workflow pages.
+- 2026-05-16: Improved UI-3 relationship management and genealogy query pages.
 
 ## Open Questions
 
