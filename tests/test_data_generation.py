@@ -1,7 +1,9 @@
 import csv
 import json
 
-from scripts.generate_simulated_data import generate_data
+from werkzeug.security import check_password_hash
+
+from scripts.generate_simulated_data import SIMULATED_USER_PASSWORD, generate_data
 from scripts.validate_simulated_data import validate
 
 
@@ -50,6 +52,23 @@ def test_generated_data_validates_at_small_scale(tmp_path):
     assert summary["family_tree_count"] == 3
     assert summary["member_count"] == 120
     assert summary["parent_child_relationship_count"] > 0
+
+
+def test_generated_users_can_login_with_demo_password(tmp_path):
+    generate_data(
+        output_dir=tmp_path,
+        seed=123,
+        tree_count=3,
+        total_members=120,
+        large_tree_members=60,
+        generations=6,
+    )
+
+    users = read_csv(tmp_path / "users.csv")
+
+    assert users[0]["username"] == "sim_user_1"
+    assert users[0]["password_hash"] != SIMULATED_USER_PASSWORD
+    assert check_password_hash(users[0]["password_hash"], SIMULATED_USER_PASSWORD)
 
 
 def test_generated_data_is_reproducible_for_same_seed(tmp_path):

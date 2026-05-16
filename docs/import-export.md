@@ -42,6 +42,29 @@ docker compose exec -T db psql -U roottrace -d roottrace -c "SELECT COUNT(*) FRO
 
 导入 SQL 使用 `COPY ... FROM` 读取容器内的 `/generated/*.csv` 文件。`compose.yaml` 将本地 `data/generated` 目录只读挂载到容器的 `/generated`。
 
+## 导入后的登录用户
+
+模拟数据包含 10 个可登录用户，统一演示密码为：
+
+```text
+roottrace-demo
+```
+
+| 用户名 | 可见族谱 |
+| --- | --- |
+| `sim_user_1` | `Chen Genealogy 1` |
+| `sim_user_2` | `Li Genealogy 2` |
+| `sim_user_3` | `Wang Genealogy 3` |
+| `sim_user_4` | `Zhang Genealogy 4` |
+| `sim_user_5` | `Liu Genealogy 5` |
+| `sim_user_6` | `Huang Genealogy 6` |
+| `sim_user_7` | `Zhao Genealogy 7` |
+| `sim_user_8` | `Wu Genealogy 8` |
+| `sim_user_9` | `Zhou Genealogy 9` |
+| `sim_user_10` | `Xu Genealogy 10` |
+
+启动 Flask 后，可以访问 `/auth/login`，使用以上用户名和密码登录查看对应族谱。
+
 ## 分支导出
 
 默认导出根成员 ID 为 `1` 的直系后代分支：

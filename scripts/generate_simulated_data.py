@@ -6,6 +6,11 @@ from pathlib import Path
 
 
 CREATED_AT = "2026-05-16T00:00:00+08:00"
+SIMULATED_USER_PASSWORD = "roottrace-demo"
+SIMULATED_USER_PASSWORD_HASH = (
+    "pbkdf2:sha256:1000000$k2KBcI6O67YCMZTO$"
+    "3700e5102982126cf1e0b664b31007f83fe93ab5b30517b1636fba4740d99e11"
+)
 SURNAMES = ["Chen", "Li", "Wang", "Zhang", "Liu", "Huang", "Zhao", "Wu", "Zhou", "Xu"]
 
 CSV_COLUMNS = {
@@ -93,7 +98,7 @@ def generate_data(output_dir, seed, tree_count, total_members, large_tree_member
             {
                 "id": tree_id,
                 "username": f"sim_user_{tree_id}",
-                "password_hash": "simulated-password-hash",
+                "password_hash": SIMULATED_USER_PASSWORD_HASH,
                 "display_name": f"Simulated User {tree_id}",
                 "created_at": CREATED_AT,
             }

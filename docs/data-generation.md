@@ -31,6 +31,16 @@ uv run python scripts/generate_simulated_data.py --output data/generated --seed 
 - `marriages.csv`：模拟婚姻关系。
 - `manifest.json`：生成结果摘要，包括成员总数、族谱数、最大族谱成员数、最大代数和随机种子。
 
+## 模拟登录用户
+
+生成脚本会创建 `sim_user_1` 到 `sim_user_10`。这些用户使用统一演示密码：
+
+```text
+roottrace-demo
+```
+
+每个用户默认创建一个族谱，例如 `sim_user_1` 拥有 `Chen Genealogy 1`，`sim_user_2` 拥有 `Li Genealogy 2`。该密码只用于本地实验演示，不用于生产环境。
+
 ## 验证命令
 
 ```bash
