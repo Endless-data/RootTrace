@@ -32,13 +32,24 @@ docker compose exec -T db psql -U roottrace -d roottrace -f /schema/schema.sql
 docker compose exec -T db psql -U roottrace -d roottrace -c "\dt"
 ```
 
-Run the app locally with a generated Flask session key:
+Create a local environment file from the example:
 
 ```bash
-SECRET_KEY="$(python3 -c 'import secrets; print(secrets.token_hex(32))')" uv run flask --app app run
+cp .env.example .env
 ```
 
-The default `DATABASE_URL` is only a local placeholder. Real database credentials and `SECRET_KEY` values must be provided through environment variables.
+Edit `.env` and replace `SECRET_KEY` with a long random value. The `.env` file is ignored by git.
+
+Run the app locally:
+
+```bash
+docker compose up -d db
+docker compose exec -T db psql -U roottrace -d roottrace -f /schema/schema.sql
+uv run flask --app app run
+```
+
+The default local `DATABASE_URL` matches `compose.yaml`: `postgresql+psycopg://roottrace@localhost:5433/roottrace`.
+Flask loads `.env` automatically through `python-dotenv`. If `SECRET_KEY` is not set, the app still generates a temporary development key at process startup; for repeatable local sessions, keep a stable `SECRET_KEY` in `.env`.
 
 ## Database Design
 

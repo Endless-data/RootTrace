@@ -1,4 +1,5 @@
 import os
+import secrets
 
 from flask import Flask
 
@@ -9,10 +10,10 @@ from .routes import bp
 def create_app(test_config=None):
     app = Flask(__name__)
     app.config.from_mapping(
-        SECRET_KEY=os.environ.get("SECRET_KEY"),
+        SECRET_KEY=os.environ.get("SECRET_KEY") or secrets.token_hex(32),
         SQLALCHEMY_DATABASE_URI=os.environ.get(
             "DATABASE_URL",
-            "postgresql+psycopg://localhost/roottrace",
+            "postgresql+psycopg://roottrace@localhost:5433/roottrace",
         ),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
     )
