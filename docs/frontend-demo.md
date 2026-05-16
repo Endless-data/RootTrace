@@ -4,7 +4,28 @@
 
 ## 1. 启动项目
 
-在项目根目录运行：
+推荐方式：使用 Docker Compose 启动完整容器环境。
+
+```bash
+docker compose up --build
+```
+
+首次启动或重置数据库后，另开一个终端初始化表结构和索引：
+
+```bash
+docker compose exec -T db psql -U roottrace -d roottrace -f /schema/schema.sql
+docker compose exec -T db psql -U roottrace -d roottrace -f /schema/indexes.sql
+```
+
+如果需要演示批量模拟数据，先生成并导入：
+
+```bash
+uv run python scripts/generate_simulated_data.py --output data/generated --seed 20260516
+uv run python scripts/validate_simulated_data.py data/generated
+docker compose exec -T db psql -U roottrace -d roottrace -f /schema/import_simulated_data.sql
+```
+
+也可以使用宿主机 Flask 开发方式：
 
 ```bash
 docker compose up -d db

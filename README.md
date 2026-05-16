@@ -41,7 +41,7 @@ cp .env.example .env
 
 编辑 `.env`，将 `SECRET_KEY` 替换为足够长的随机值。`.env` 文件已被 git 忽略，不会提交到仓库。
 
-Run the app locally:
+Run the app locally with the database in Docker and Flask on the host:
 
 ```bash
 docker compose up -d db
@@ -51,6 +51,41 @@ uv run flask --app app run
 
 The default local `DATABASE_URL` matches `compose.yaml`: `postgresql+psycopg://roottrace@localhost:5433/roottrace`.
 Flask 会通过 `python-dotenv` 自动加载 `.env`。如果没有设置 `SECRET_KEY`，应用会在进程启动时生成临时开发密钥；如果希望本地会话可重复，请在 `.env` 中保留一个稳定的 `SECRET_KEY`。
+
+Run the full project in Docker containers:
+
+```bash
+docker compose up --build
+```
+
+Then open:
+
+```text
+http://127.0.0.1:5000/
+```
+
+如果 5000 端口已被宿主机上的 Flask 进程占用，请先停止旧进程，或临时将 `compose.yaml` 中 `web` 的端口映射改为 `5050:5000` 后访问 `http://127.0.0.1:5050/`。
+
+The `web` container connects to PostgreSQL through the Compose service name `db`:
+
+```text
+postgresql+psycopg://roottrace@db:5432/roottrace
+```
+
+For first-time container startup or after resetting the database, initialize tables and indexes:
+
+```bash
+docker compose exec -T db psql -U roottrace -d roottrace -f /schema/schema.sql
+docker compose exec -T db psql -U roottrace -d roottrace -f /schema/indexes.sql
+```
+
+To load the large simulated dataset, generate it on the host first and then import it into the database container:
+
+```bash
+uv run python scripts/generate_simulated_data.py --output data/generated --seed 20260516
+uv run python scripts/validate_simulated_data.py data/generated
+docker compose exec -T db psql -U roottrace -d roottrace -f /schema/import_simulated_data.sql
+```
 
 ## Database Design
 
