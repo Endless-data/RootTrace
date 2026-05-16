@@ -11,7 +11,9 @@ SIMULATED_USER_PASSWORD_HASH = (
     "pbkdf2:sha256:1000000$k2KBcI6O67YCMZTO$"
     "3700e5102982126cf1e0b664b31007f83fe93ab5b30517b1636fba4740d99e11"
 )
-SURNAMES = ["Chen", "Li", "Wang", "Zhang", "Liu", "Huang", "Zhao", "Wu", "Zhou", "Xu"]
+SIMULATED_ADMIN_ID = 1
+SIMULATED_ADMIN_USERNAME = "sim_admin"
+SURNAMES = ["陈", "李", "王", "张", "刘", "黄", "赵", "吴", "周", "徐"]
 
 CSV_COLUMNS = {
     "users.csv": ["id", "username", "password_hash", "display_name", "created_at"],
@@ -92,24 +94,34 @@ def generate_data(output_dir, seed, tree_count, total_members, large_tree_member
     relationship_id = 1
     marriage_id = 1
 
+    users.append(
+        {
+            "id": SIMULATED_ADMIN_ID,
+            "username": SIMULATED_ADMIN_USERNAME,
+            "password_hash": SIMULATED_USER_PASSWORD_HASH,
+            "display_name": "模拟管理员",
+            "created_at": CREATED_AT,
+        }
+    )
+
     for tree_id, count in enumerate(counts, start=1):
         surname = SURNAMES[(tree_id - 1) % len(SURNAMES)]
         users.append(
             {
-                "id": tree_id,
+                "id": tree_id + 1,
                 "username": f"sim_user_{tree_id}",
                 "password_hash": SIMULATED_USER_PASSWORD_HASH,
-                "display_name": f"Simulated User {tree_id}",
+                "display_name": f"模拟用户 {tree_id}",
                 "created_at": CREATED_AT,
             }
         )
         family_trees.append(
             {
                 "id": tree_id,
-                "name": f"{surname} Genealogy {tree_id}",
+                "name": f"{surname}氏族谱 {tree_id}",
                 "surname": surname,
                 "revision_time": "2026-05-16",
-                "created_by_user_id": tree_id,
+                "created_by_user_id": SIMULATED_ADMIN_ID,
                 "created_at": CREATED_AT,
             }
         )
@@ -135,12 +147,12 @@ def generate_data(output_dir, seed, tree_count, total_members, large_tree_member
                     {
                         "id": member_id,
                         "family_tree_id": tree_id,
-                        "name": f"{surname} Member {member_id}",
+                        "name": f"{surname}氏第 {generation} 代成员 {member_id}",
                         "gender": gender,
                         "birth_year": birth_year,
                         "death_year": death_year,
                         "generation": generation,
-                        "biography": f"Simulated member in generation {generation}.",
+                        "biography": f"第 {generation} 代模拟成员。",
                         "created_at": CREATED_AT,
                     }
                 )

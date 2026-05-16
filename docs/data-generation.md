@@ -33,13 +33,23 @@ uv run python scripts/generate_simulated_data.py --output data/generated --seed 
 
 ## 模拟登录用户
 
-生成脚本会创建 `sim_user_1` 到 `sim_user_10`。这些用户使用统一演示密码：
+生成脚本会创建 1 个统一管理用户和 `sim_user_1` 到 `sim_user_10` 普通模拟用户。这些用户使用统一演示密码：
 
 ```text
 roottrace-demo
 ```
 
-每个用户默认创建一个族谱，例如 `sim_user_1` 拥有 `Chen Genealogy 1`，`sim_user_2` 拥有 `Li Genealogy 2`。该密码只用于本地实验演示，不用于生产环境。
+统一管理用户为：
+
+```text
+sim_admin
+```
+
+所有模拟族谱均由 `sim_admin` 创建。导入数据库后，使用 `sim_admin / roottrace-demo` 登录即可查看、编辑、删除全部模拟族谱，并对任意族谱进行成员、关系、导入导出等操作。
+
+普通模拟用户 `sim_user_1` 到 `sim_user_10` 仍可登录，但默认不拥有导入的模拟族谱。该密码只用于本地实验演示，不用于生产环境。
+
+生成数据的族谱名、姓氏、成员名和成员简介使用中文内容，例如 `陈氏族谱 1`、`陈氏第 1 代成员 1`。
 
 ## 验证命令
 

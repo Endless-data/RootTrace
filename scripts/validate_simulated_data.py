@@ -35,6 +35,9 @@ EXPECTED_COLUMNS = {
     "marriages.csv": ["id", "family_tree_id", "person_a_id", "person_b_id", "start_year", "end_year"],
 }
 
+SIMULATED_ADMIN_ID = 1
+SIMULATED_ADMIN_USERNAME = "sim_admin"
+
 
 def read_rows(path):
     with path.open(encoding="utf-8", newline="") as file:
@@ -61,8 +64,21 @@ def validate(output_dir, require_full=True):
     require(manifest_path.exists(), "missing manifest.json")
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
 
+    user_ids = {int(row["id"]) for row in rows["users.csv"]}
+    require(len(user_ids) == len(rows["users.csv"]), "duplicate user id")
+    admin_rows = [
+        row
+        for row in rows["users.csv"]
+        if int(row["id"]) == SIMULATED_ADMIN_ID and row["username"] == SIMULATED_ADMIN_USERNAME
+    ]
+    require(len(admin_rows) == 1, "missing simulated admin user")
+
     tree_ids = {int(row["id"]) for row in rows["family_trees.csv"]}
     require(len(tree_ids) == len(rows["family_trees.csv"]), "duplicate family tree id")
+    for row in rows["family_trees.csv"]:
+        creator_id = int(row["created_by_user_id"])
+        require(creator_id in user_ids, f"family tree {row['id']} references unknown creator")
+        require(creator_id == SIMULATED_ADMIN_ID, f"family tree {row['id']} is not owned by simulated admin")
 
     member_tree = {}
     member_birth_year = {}

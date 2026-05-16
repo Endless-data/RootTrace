@@ -3,7 +3,7 @@ import json
 
 from werkzeug.security import check_password_hash
 
-from scripts.generate_simulated_data import SIMULATED_USER_PASSWORD, generate_data
+from scripts.generate_simulated_data import SIMULATED_ADMIN_USERNAME, SIMULATED_USER_PASSWORD, generate_data
 from scripts.validate_simulated_data import validate
 
 
@@ -66,9 +66,33 @@ def test_generated_users_can_login_with_demo_password(tmp_path):
 
     users = read_csv(tmp_path / "users.csv")
 
-    assert users[0]["username"] == "sim_user_1"
+    assert users[0]["username"] == SIMULATED_ADMIN_USERNAME
+    assert users[0]["display_name"] == "模拟管理员"
     assert users[0]["password_hash"] != SIMULATED_USER_PASSWORD
     assert check_password_hash(users[0]["password_hash"], SIMULATED_USER_PASSWORD)
+    assert users[1]["username"] == "sim_user_1"
+    assert users[1]["display_name"] == "模拟用户 1"
+    assert check_password_hash(users[1]["password_hash"], SIMULATED_USER_PASSWORD)
+
+
+def test_generated_family_trees_are_owned_by_admin_and_use_chinese_content(tmp_path):
+    generate_data(
+        output_dir=tmp_path,
+        seed=123,
+        tree_count=3,
+        total_members=120,
+        large_tree_members=60,
+        generations=6,
+    )
+
+    family_trees = read_csv(tmp_path / "family_trees.csv")
+    members = read_csv(tmp_path / "members.csv")
+
+    assert {row["created_by_user_id"] for row in family_trees} == {"1"}
+    assert family_trees[0]["name"] == "陈氏族谱 1"
+    assert family_trees[0]["surname"] == "陈"
+    assert members[0]["name"].startswith("陈氏第 1 代成员")
+    assert members[0]["biography"] == "第 1 代模拟成员。"
 
 
 def test_generated_data_is_reproducible_for_same_seed(tmp_path):
