@@ -623,21 +623,39 @@ Recommended commit message:
 ### Milestone 14: Index And Performance Experiment
 
 Goal:
-- Add indexes and record performance comparison for the required query.
+- Add indexes and record performance comparison for the required query and common genealogy access paths.
 
 File scope:
-- TODO: index SQL/migration files.
-- TODO: performance notes path.
-- TODO: EXPLAIN output artifact path.
+- `sql/indexes.sql`
+- `sql/performance_experiment.sql`
+- `docs/performance-analysis.md`
+- `tests/test_performance_indexes.py`
+- `README.md`
+- `PLANS.md`
 
 Verification command:
-- TODO: database-specific EXPLAIN command.
+- `uv run pytest tests/test_performance_indexes.py`
+- `uv run pytest`
+- `uv run flask --app app routes`
+- `uv run python scripts/generate_simulated_data.py --output data/generated --seed 20260516`
+- `uv run python scripts/validate_simulated_data.py data/generated`
+- `docker compose up -d db`
+- `docker compose exec -T db psql -U roottrace -d roottrace -f /schema/schema.sql`
+- `docker compose exec -T db psql -U roottrace -d roottrace -f /schema/import_simulated_data.sql`
+- `docker compose exec -T db psql -U roottrace -d roottrace -f /schema/performance_experiment.sql`
+- `docker compose exec -T db psql -U roottrace -d roottrace -f /schema/indexes.sql`
+- `docker compose exec -T db psql -U roottrace -d roottrace -f /schema/performance_experiment.sql`
+- `docker compose down`
+- `git status --short`
 
 Completion standard:
 - Index strategy covers fuzzy name search.
 - Index strategy covers querying children by parent ID.
+- Index strategy covers recursive ancestor lookup by child ID.
+- Index strategy covers spouse lookup by member ID.
 - Performance comparison is recorded with and without indexes.
-- EXPLAIN output is captured and explained.
+- EXPLAIN ANALYZE output is captured and explained.
+- Static tests verify the index SQL, performance SQL, and documentation.
 
 Recommended commit message:
 - `perf: add indexes and performance analysis`
@@ -691,7 +709,8 @@ Recommended commit message:
 - UI-2 core workflow pages have been implemented.
 - UI-3 genealogy query experience has been implemented.
 - UI-4 frontend polish and demo readiness has been implemented.
-- No index experiment or final report has been implemented yet.
+- Milestone 14 index and performance experiment has been implemented.
+- No final report has been implemented yet.
 
 ## Progress Log
 
@@ -716,6 +735,7 @@ Recommended commit message:
 - 2026-05-16: Improved UI-2 authentication, family tree, and member workflow pages.
 - 2026-05-16: Improved UI-3 relationship management and genealogy query pages.
 - 2026-05-16: Completed UI-4 frontend polish and Chinese demo guide.
+- 2026-05-16: Created Milestone 14 index SQL, EXPLAIN performance script, and performance analysis documentation.
 
 ## Open Questions
 

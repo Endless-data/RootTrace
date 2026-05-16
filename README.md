@@ -2,7 +2,7 @@
 
 RootTrace is a genealogy management system project based on `docs/实验内容.md`.
 
-The project has completed Milestone 11: required SQL deliverables. The app supports local user registration, login, family tree creation, collaborator access control, member management, direct relationships, dashboard stats, descendant tree preview, ancestor lookup, and relationship path lookup.
+The project has completed Milestone 14: index and performance experiment. The app supports local user registration, login, family tree creation, collaborator access control, member management, direct relationships, dashboard stats, descendant tree preview, ancestor lookup, relationship path lookup, import/export workflows, and performance analysis artifacts.
 
 ## Technical Baseline
 
@@ -61,6 +61,7 @@ Flask 会通过 `python-dotenv` 自动加载 `.env`。如果没有设置 `SECRET
 - SQL query explanation: `docs/sql-queries.md`
 - Simulated data generation: `docs/data-generation.md`
 - Import/export workflow: `docs/import-export.md`
+- Index and performance analysis: `docs/performance-analysis.md`
 - Local PostgreSQL service: `compose.yaml`
 
 ## Simulated Data
@@ -86,6 +87,18 @@ docker compose exec -T db psql -U roottrace -d roottrace -f /schema/export_branc
 ```
 
 The exported branch CSV is written to `exports/branch_export.csv` and ignored by git.
+
+## Index And Performance Experiment
+
+Run the PostgreSQL index and EXPLAIN workflow after importing simulated data:
+
+```bash
+docker compose exec -T db psql -U roottrace -d roottrace -f /schema/performance_experiment.sql
+docker compose exec -T db psql -U roottrace -d roottrace -f /schema/indexes.sql
+docker compose exec -T db psql -U roottrace -d roottrace -f /schema/performance_experiment.sql
+```
+
+The experiment SQL is documented in `docs/performance-analysis.md`.
 
 ## Frontend
 
