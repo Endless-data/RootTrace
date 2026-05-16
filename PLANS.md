@@ -496,6 +496,126 @@ Completion standard:
 Recommended commit message:
 - `docs: add import and export workflow`
 
+## Frontend Optimization Track
+
+The following UI milestones are inserted before the index and final-report work. They keep the existing Flask server-rendered template approach, and they must be implemented one milestone at a time.
+
+### UI-1: Visual Foundation And Layout
+
+Goal:
+- Establish a consistent visual foundation for the whole application.
+
+File scope:
+- `app/static/css/app.css`
+- `app/templates/base.html`
+- `app/routes.py`
+- `app/templates/home.html`
+- `tests/test_app.py`
+- `README.md`
+- `PLANS.md`
+
+Verification command:
+- `uv run pytest`
+- `uv run flask --app app routes`
+- `git status --short`
+
+Completion standard:
+- The root route `/` renders an HTML home page instead of a JSON health response.
+- The application has a consistent header, navigation, content container, buttons, forms, tables, alerts, and empty states.
+- The UI remains based on Flask server-rendered HTML templates.
+- No external CDN, frontend framework, or network resource is introduced.
+- All tests pass.
+
+Recommended commit message:
+- `style: add frontend visual foundation`
+
+### UI-2: Core Workflow Pages
+
+Goal:
+- Improve the daily workflow pages for authentication, family trees, and member management.
+
+File scope:
+- `app/templates/auth/*.html`
+- `app/templates/family_trees/*.html`
+- `app/templates/members/*.html`
+- `app/static/css/app.css`
+- `tests/test_auth.py`
+- `tests/test_family_trees.py`
+- `tests/test_members.py`
+- `README.md`
+- `PLANS.md`
+
+Verification command:
+- `uv run pytest`
+- `uv run flask --app app routes`
+- `git status --short`
+
+Completion standard:
+- Login and registration forms are visually clear and easy to scan.
+- Family tree list and detail pages have clear primary actions and status sections.
+- Member list search and table presentation are easier to use.
+- Member detail actions have clear visual hierarchy.
+- Error messages and empty states are styled consistently.
+
+Recommended commit message:
+- `style: improve core workflow pages`
+
+### UI-3: Genealogy Query Experience
+
+Goal:
+- Improve the relationship management and genealogy query pages.
+
+File scope:
+- `app/templates/relationships/detail.html`
+- `app/templates/tree_preview/index.html`
+- `app/templates/ancestors/index.html`
+- `app/templates/relationship_paths/index.html`
+- `app/static/css/app.css`
+- Relevant tests if template text changes require updates.
+- `README.md`
+- `PLANS.md`
+
+Verification command:
+- `uv run pytest`
+- `uv run flask --app app routes`
+- `git status --short`
+
+Completion standard:
+- Parent-child and marriage management sections are visually separated and easy to operate.
+- Descendant tree, ancestor tree, and relationship path results are easier to read.
+- Query input, result, no-result, and cycle-warning states use consistent styling.
+- No complex graph canvas, drag-and-drop tree editor, or asynchronous search is introduced.
+
+Recommended commit message:
+- `style: improve genealogy query pages`
+
+### UI-4: Frontend Polish And Demo Readiness
+
+Goal:
+- Finish frontend polish and prepare a repeatable demo path.
+
+File scope:
+- `app/static/css/app.css`
+- Core templates that need final small layout fixes.
+- `docs/frontend-demo.md`
+- `README.md`
+- `PLANS.md`
+
+Verification command:
+- `uv run pytest`
+- `uv run flask --app app routes`
+- Manual browser check for `/`, auth pages, family tree detail, member list, member detail, relationship management, tree preview, ancestor query, and relationship path query.
+- `git status --short`
+
+Completion standard:
+- Desktop and mobile-width layouts do not visibly break.
+- Text does not overflow buttons, tables, cards, or query result sections.
+- The main demo path is documented in Chinese.
+- All tests pass.
+
+Recommended commit message:
+- `docs: add frontend demo checklist`
+
 ### Milestone 14: Index And Performance Experiment
 
 Goal:
@@ -563,6 +683,7 @@ Recommended commit message:
 - Milestone 11 required SQL deliverables have been implemented.
 - Milestone 12 simulated data generator has been implemented.
 - Milestone 13 import/export workflow has been implemented.
+- Frontend optimization track has been planned but not implemented yet.
 - No index experiment or final report has been implemented yet.
 
 ## Progress Log
@@ -583,6 +704,7 @@ Recommended commit message:
 - 2026-05-15: Created Milestone 11 required SQL queries and query documentation.
 - 2026-05-16: Created Milestone 12 simulated data generator, validator, and documentation.
 - 2026-05-16: Created Milestone 13 PostgreSQL import/export workflow documentation and SQL.
+- 2026-05-16: Added frontend optimization track to the roadmap.
 
 ## Open Questions
 
