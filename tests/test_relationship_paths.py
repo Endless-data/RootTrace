@@ -228,6 +228,32 @@ def test_relationship_path_handles_same_member(app, client):
     assert f"#{member_id}".encode() in response.data
 
 
+def test_relationship_path_accepts_prefilled_source_only(app, client):
+    tree_id = setup_tree(app, client)
+    create_member(client, tree_id, "Source")
+    with app.app_context():
+        source_id = member_id_by_name("Source")
+
+    response = client.get(f"/family-trees/{tree_id}/relationship-path?source_member_id={source_id}")
+
+    assert response.status_code == 200
+    assert f'value="{source_id}"'.encode() in response.data
+    assert "已预填一个成员 ID".encode() in response.data
+
+
+def test_relationship_path_accepts_prefilled_target_only(app, client):
+    tree_id = setup_tree(app, client)
+    create_member(client, tree_id, "Target")
+    with app.app_context():
+        target_id = member_id_by_name("Target")
+
+    response = client.get(f"/family-trees/{tree_id}/relationship-path?target_member_id={target_id}")
+
+    assert response.status_code == 200
+    assert f'value="{target_id}"'.encode() in response.data
+    assert "已预填一个成员 ID".encode() in response.data
+
+
 def test_relationship_path_rejects_member_from_other_tree(app, client):
     tree_id = setup_tree(app, client)
     create_member(client, tree_id, "Local")

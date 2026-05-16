@@ -39,6 +39,10 @@
       {% endif %}
     </section>
   {% else %}
-    <p class="empty-state">请输入两个成员 ID 以查找亲缘路径。</p>
+    {% if source_member_id or target_member_id %}
+      <p class="empty-state">已预填一个成员 ID，请补充另一个成员 ID 后查找亲缘路径。</p>
+    {% else %}
+      <p class="empty-state">请输入两个成员 ID 以查找亲缘路径。</p>
+    {% endif %}
   {% endif %}
 {% endblock %}

@@ -83,16 +83,20 @@ def index(family_tree):
     source = None
     target = None
     path = None
-    submitted = bool(source_member_id_raw or target_member_id_raw)
+    has_source = bool(source_member_id_raw)
+    has_target = bool(target_member_id_raw)
+    submitted = has_source and has_target
 
     if submitted:
         source_member_id = parse_member_id(source_member_id_raw)
         target_member_id = parse_member_id(target_member_id_raw)
-        if source_member_id is None or target_member_id is None:
-            abort(404)
         source = get_member_or_404(family_tree, source_member_id)
         target = get_member_or_404(family_tree, target_member_id)
         path = find_relationship_path(source, target, family_tree.id)
+    elif has_source:
+        parse_member_id(source_member_id_raw)
+    elif has_target:
+        parse_member_id(target_member_id_raw)
 
     return render_template(
         "relationship_paths/index.html",
