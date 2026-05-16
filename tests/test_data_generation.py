@@ -91,8 +91,9 @@ def test_generated_family_trees_are_owned_by_admin_and_use_chinese_content(tmp_p
     assert {row["created_by_user_id"] for row in family_trees} == {"1"}
     assert family_trees[0]["name"] == "陈氏族谱 1"
     assert family_trees[0]["surname"] == "陈"
-    assert members[0]["name"].startswith("陈氏第 1 代成员")
-    assert members[0]["biography"] == "第 1 代模拟成员。"
+    assert members[0]["name"].startswith("陈")
+    assert "成员" not in members[0]["name"]
+    assert any(place in members[0]["biography"] for place in ("江苏常州", "浙江绍兴", "福建泉州", "广东佛山", "山东曲阜", "河南洛阳"))
 
 
 def test_generated_data_is_reproducible_for_same_seed(tmp_path):
@@ -127,4 +128,32 @@ def test_generated_relationships_keep_parents_older_than_children(tmp_path):
         parent = members[int(relationship["parent_id"])]
         child = members[int(relationship["child_id"])]
         assert int(parent["family_tree_id"]) == int(child["family_tree_id"])
-        assert int(parent["birth_year"]) < int(child["birth_year"])
+        assert int(parent["birth_year"]) + 16 <= int(child["birth_year"])
+        if relationship["relationship_type"] == "father":
+            assert parent["gender"] == "male"
+        if relationship["relationship_type"] == "mother":
+            assert parent["gender"] == "female"
+
+
+def test_generated_marriages_have_realistic_years(tmp_path):
+    generate_data(
+        output_dir=tmp_path,
+        seed=123,
+        tree_count=3,
+        total_members=120,
+        large_tree_members=60,
+        generations=6,
+    )
+    members = {int(row["id"]): row for row in read_csv(tmp_path / "members.csv")}
+    marriages = read_csv(tmp_path / "marriages.csv")
+
+    assert marriages
+    for marriage in marriages:
+        person_a = members[int(marriage["person_a_id"])]
+        person_b = members[int(marriage["person_b_id"])]
+        start_year = int(marriage["start_year"])
+        assert abs(int(person_a["birth_year"]) - int(person_b["birth_year"])) <= 25
+        assert start_year >= int(person_a["birth_year"]) + 18
+        assert start_year >= int(person_b["birth_year"]) + 18
+        if marriage["end_year"]:
+            assert int(marriage["end_year"]) >= start_year

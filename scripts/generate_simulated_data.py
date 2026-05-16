@@ -14,6 +14,41 @@ SIMULATED_USER_PASSWORD_HASH = (
 SIMULATED_ADMIN_ID = 1
 SIMULATED_ADMIN_USERNAME = "sim_admin"
 SURNAMES = ["陈", "李", "王", "张", "刘", "黄", "赵", "吴", "周", "徐"]
+MALE_GIVEN_NAMES = [
+    "德明",
+    "志远",
+    "建国",
+    "国强",
+    "文华",
+    "家兴",
+    "永康",
+    "世杰",
+    "俊峰",
+    "嘉诚",
+    "浩然",
+    "子轩",
+]
+FEMALE_GIVEN_NAMES = [
+    "淑兰",
+    "秀英",
+    "桂芳",
+    "玉梅",
+    "丽华",
+    "美珍",
+    "晓燕",
+    "静怡",
+    "佳慧",
+    "思琪",
+    "雨桐",
+    "若琳",
+]
+BRANCH_PLACES = ["江苏常州", "浙江绍兴", "福建泉州", "广东佛山", "山东曲阜", "河南洛阳"]
+OCCUPATIONS = ["务农", "经商", "从教", "行医", "从军", "做手工营生", "在本地任职", "外出求学"]
+BIO_TEMPLATES = [
+    "生于{place}，排行第{rank}，成年后主要{occupation}。",
+    "族谱记载其为第{generation}代成员，曾居{place}，以{occupation}为业。",
+    "早年随家族迁居{place}，在同辈中排行第{rank}，长期{occupation}。",
+]
 
 CSV_COLUMNS = {
     "users.csv": ["id", "username", "password_hash", "display_name", "created_at"],
@@ -64,11 +99,18 @@ def member_counts(tree_count, total_members, large_tree_members):
 def generation_sizes(total, generation_count):
     sizes = [1] * generation_count
     remaining = total - generation_count
-    index = 0
-    while remaining > 0:
-        sizes[index % generation_count] += 1
-        remaining -= 1
-        index += 1
+    weights = list(range(1, generation_count + 1))
+    total_weight = sum(weights)
+    allocations = []
+    for index, weight in enumerate(weights):
+        exact = remaining * weight / total_weight
+        whole = int(exact)
+        sizes[index] += whole
+        allocations.append((exact - whole, index))
+
+    leftover = total - sum(sizes)
+    for _, index in sorted(allocations, reverse=True)[:leftover]:
+        sizes[index] += 1
     return sizes
 
 
@@ -77,6 +119,37 @@ def write_csv(path, columns, rows):
         writer = csv.DictWriter(file, fieldnames=columns)
         writer.writeheader()
         writer.writerows(rows)
+
+
+def generation_birth_year(generation, rng):
+    return 1248 + (generation - 1) * 26 + rng.randint(0, 2)
+
+
+def given_name(gender, generation, index, rng):
+    names = MALE_GIVEN_NAMES if gender == "male" else FEMALE_GIVEN_NAMES
+    return names[(generation + index) % len(names)]
+
+
+def member_biography(generation, rank, rng):
+    return rng.choice(BIO_TEMPLATES).format(
+        place=rng.choice(BRANCH_PLACES),
+        rank=rank,
+        generation=generation,
+        occupation=rng.choice(OCCUPATIONS),
+    )
+
+
+def death_year_for(birth_year, rng):
+    if birth_year >= 1965:
+        return ""
+    death_year = birth_year + rng.randint(58, 92)
+    return death_year if death_year <= 2026 else ""
+
+
+def pair_generation_members(member_ids, member_genders):
+    males = [member_id for member_id in member_ids if member_genders[member_id] == "male"]
+    females = [member_id for member_id in member_ids if member_genders[member_id] == "female"]
+    return list(zip(males, females))
 
 
 def generate_data(output_dir, seed, tree_count, total_members, large_tree_members, generations):
@@ -129,44 +202,61 @@ def generate_data(output_dir, seed, tree_count, total_members, large_tree_member
         generation_count = min(generations, count)
         sizes = generation_sizes(count, generation_count)
         previous_generation_ids = []
+        previous_generation_couples = []
         first_member_id = member_id
         tree_relationships = 0
         tree_marriages = 0
-        tree_generation_ids = []
+        member_genders = {}
+        member_birth_years = {}
 
         for generation, size in enumerate(sizes, start=1):
             current_generation_ids = []
-            birth_base = 1900 + (generation - 1) * 3
+            birth_base = generation_birth_year(generation, rng)
             for index in range(size):
-                gender = "male" if (member_id + generation + index) % 2 == 0 else "female"
-                birth_year = birth_base + rng.randint(0, 2)
-                death_year = ""
-                if birth_year <= 1955:
-                    death_year = birth_year + rng.randint(55, 88)
+                gender = "male" if index % 2 == 0 else "female"
+                birth_year = birth_base + rng.randint(0, 3)
+                rank = index + 1
                 members.append(
                     {
                         "id": member_id,
                         "family_tree_id": tree_id,
-                        "name": f"{surname}氏第 {generation} 代成员 {member_id}",
+                        "name": f"{surname}{given_name(gender, generation, index, rng)}",
                         "gender": gender,
                         "birth_year": birth_year,
-                        "death_year": death_year,
+                        "death_year": death_year_for(birth_year, rng),
                         "generation": generation,
-                        "biography": f"第 {generation} 代模拟成员。",
+                        "biography": member_biography(generation, rank, rng),
                         "created_at": CREATED_AT,
                     }
                 )
                 current_generation_ids.append(member_id)
+                member_genders[member_id] = gender
+                member_birth_years[member_id] = birth_year
 
-                if previous_generation_ids:
+                if previous_generation_couples:
+                    father_id, mother_id = previous_generation_couples[index % len(previous_generation_couples)]
+                    for parent_id, relationship_type in ((father_id, "father"), (mother_id, "mother")):
+                        parent_child_relationships.append(
+                            {
+                                "id": relationship_id,
+                                "family_tree_id": tree_id,
+                                "parent_id": parent_id,
+                                "child_id": member_id,
+                                "relationship_type": relationship_type,
+                            }
+                        )
+                        relationship_id += 1
+                        tree_relationships += 1
+                elif previous_generation_ids:
                     parent_id = previous_generation_ids[index % len(previous_generation_ids)]
+                    relationship_type = "father" if member_genders[parent_id] == "male" else "mother"
                     parent_child_relationships.append(
                         {
                             "id": relationship_id,
                             "family_tree_id": tree_id,
                             "parent_id": parent_id,
                             "child_id": member_id,
-                            "relationship_type": "father" if parent_id % 2 == 0 else "mother",
+                            "relationship_type": relationship_type,
                         }
                     )
                     relationship_id += 1
@@ -174,26 +264,27 @@ def generate_data(output_dir, seed, tree_count, total_members, large_tree_member
 
                 member_id += 1
 
-            tree_generation_ids.append(current_generation_ids)
-            previous_generation_ids = current_generation_ids
-
-        for ids in tree_generation_ids:
-            pair_limit = min(len(ids) // 2, max(1, len(ids) // 20))
-            for offset in range(pair_limit):
-                person_a_id = ids[offset * 2]
-                person_b_id = ids[offset * 2 + 1]
+            current_generation_couples = pair_generation_members(current_generation_ids, member_genders)
+            for offset, (person_a_id, person_b_id) in enumerate(current_generation_couples):
+                start_year = max(member_birth_years[person_a_id], member_birth_years[person_b_id]) + rng.randint(20, 28)
+                end_year = ""
+                if start_year < 1950 and offset % 11 == 0:
+                    end_year = start_year + rng.randint(18, 45)
                 marriages.append(
                     {
                         "id": marriage_id,
                         "family_tree_id": tree_id,
                         "person_a_id": person_a_id,
                         "person_b_id": person_b_id,
-                        "start_year": "",
-                        "end_year": "",
+                        "start_year": start_year,
+                        "end_year": end_year,
                     }
                 )
                 marriage_id += 1
                 tree_marriages += 1
+
+            previous_generation_ids = current_generation_ids
+            previous_generation_couples = current_generation_couples
 
         per_tree_stats.append(
             {

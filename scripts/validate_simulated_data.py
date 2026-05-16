@@ -83,6 +83,7 @@ def validate(output_dir, require_full=True):
     member_tree = {}
     member_birth_year = {}
     member_generation = {}
+    member_gender = {}
     per_tree_members = {tree_id: 0 for tree_id in tree_ids}
     per_tree_generations = {tree_id: set() for tree_id in tree_ids}
     for row in rows["members.csv"]:
@@ -95,10 +96,12 @@ def validate(output_dir, require_full=True):
         member_tree[member_id] = tree_id
         member_birth_year[member_id] = int(row["birth_year"])
         member_generation[member_id] = int(row["generation"])
+        member_gender[member_id] = row["gender"]
         per_tree_members[tree_id] += 1
         per_tree_generations[tree_id].add(int(row["generation"]))
         if row["death_year"]:
             require(int(row["death_year"]) >= int(row["birth_year"]), f"member {member_id} dies before birth")
+            require(int(row["death_year"]) - int(row["birth_year"]) <= 105, f"member {member_id} has invalid lifespan")
 
     per_tree_relationships = {tree_id: 0 for tree_id in tree_ids}
     relationship_pairs = set()
@@ -111,8 +114,12 @@ def validate(output_dir, require_full=True):
         require(parent_id != child_id, "parent-child relationship points to same member")
         require(member_tree[parent_id] == tree_id, "parent belongs to a different family tree")
         require(member_tree[child_id] == tree_id, "child belongs to a different family tree")
-        require(member_birth_year[parent_id] < member_birth_year[child_id], "parent is not older than child")
+        require(member_birth_year[parent_id] + 16 <= member_birth_year[child_id], "parent is too young for child")
         require(row["relationship_type"] in {"father", "mother"}, "invalid relationship type")
+        if row["relationship_type"] == "father":
+            require(member_gender[parent_id] == "male", "father relationship points to non-male member")
+        if row["relationship_type"] == "mother":
+            require(member_gender[parent_id] == "female", "mother relationship points to non-female member")
         pair = (parent_id, child_id, row["relationship_type"])
         require(pair not in relationship_pairs, "duplicate parent-child relationship")
         relationship_pairs.add(pair)
@@ -128,6 +135,13 @@ def validate(output_dir, require_full=True):
         require(person_a_id != person_b_id, "marriage points to same member")
         require(member_tree[person_a_id] == tree_id, "marriage member A belongs to a different family tree")
         require(member_tree[person_b_id] == tree_id, "marriage member B belongs to a different family tree")
+        require(abs(member_birth_year[person_a_id] - member_birth_year[person_b_id]) <= 25, "marriage age gap is too large")
+        if row["start_year"]:
+            start_year = int(row["start_year"])
+            require(start_year >= member_birth_year[person_a_id] + 18, "marriage member A is too young")
+            require(start_year >= member_birth_year[person_b_id] + 18, "marriage member B is too young")
+        if row["start_year"] and row["end_year"]:
+            require(int(row["end_year"]) >= int(row["start_year"]), "marriage ends before it starts")
         pair = tuple(sorted((person_a_id, person_b_id)))
         require(pair not in marriage_pairs, "duplicate marriage pair")
         marriage_pairs.add(pair)
