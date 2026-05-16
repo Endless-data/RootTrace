@@ -12,3 +12,4 @@ acceptance-notes/
 data/generated/*.csv
 data/generated/*.json
 data/generated-test/
+exports/*.csv

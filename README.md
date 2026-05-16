@@ -59,6 +59,7 @@ Flask loads `.env` automatically through `python-dotenv`. If `SECRET_KEY` is not
 - Required SQL queries: `sql/queries/required_queries.sql`
 - SQL query explanation: `docs/sql-queries.md`
 - Simulated data generation: `docs/data-generation.md`
+- Import/export workflow: `docs/import-export.md`
 - Local PostgreSQL service: `compose.yaml`
 
 ## Simulated Data
@@ -71,6 +72,19 @@ uv run python scripts/validate_simulated_data.py data/generated
 ```
 
 Generated CSV files are ignored by git.
+
+## Import And Export
+
+Import generated CSV data into PostgreSQL and export one branch backup:
+
+```bash
+docker compose up -d db
+docker compose exec -T db psql -U roottrace -d roottrace -f /schema/schema.sql
+docker compose exec -T db psql -U roottrace -d roottrace -f /schema/import_simulated_data.sql
+docker compose exec -T db psql -U roottrace -d roottrace -f /schema/export_branch.sql
+```
+
+The exported branch CSV is written to `exports/branch_export.csv` and ignored by git.
 
 ## Authentication
 

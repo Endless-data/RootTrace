@@ -463,17 +463,35 @@ Goal:
 - Document and verify database import/export using the selected RDBMS tooling.
 
 File scope:
-- TODO: import/export SQL or script path.
-- TODO: documentation path.
-- TODO: sample exported branch backup path.
+- `sql/import_simulated_data.sql`
+- `sql/export_branch.sql`
+- `docs/import-export.md`
+- `tests/test_import_export_sql.py`
+- `exports/README.md`
+- `compose.yaml`
+- `.gitignore`
+- `README.md`
+- `PLANS.md`
 
 Verification command:
-- TODO: database-specific import/export verification command.
+- `uv run pytest tests/test_import_export_sql.py`
+- `uv run pytest`
+- `uv run python scripts/generate_simulated_data.py --output data/generated --seed 20260516`
+- `uv run python scripts/validate_simulated_data.py data/generated`
+- `docker compose up -d db`
+- `docker compose exec -T db psql -U roottrace -d roottrace -f /schema/schema.sql`
+- `docker compose exec -T db psql -U roottrace -d roottrace -f /schema/import_simulated_data.sql`
+- `docker compose exec -T db psql -U roottrace -d roottrace -c "SELECT COUNT(*) FROM members;"`
+- `docker compose exec -T db psql -U roottrace -d roottrace -f /schema/export_branch.sql`
+- `docker compose down`
+- `git status --short`
 
 Completion standard:
 - Bulk import command is documented and tested.
 - Branch export or backup command is documented and tested.
 - RDBMS name and version are recorded.
+- Imported simulated data reaches 100,000 members.
+- Generated branch export files are ignored by git.
 
 Recommended commit message:
 - `docs: add import and export workflow`
@@ -544,7 +562,8 @@ Recommended commit message:
 - Milestone 10 relationship path query has been implemented.
 - Milestone 11 required SQL deliverables have been implemented.
 - Milestone 12 simulated data generator has been implemented.
-- No import/export workflow, index experiment, or final report has been implemented yet.
+- Milestone 13 import/export workflow has been implemented.
+- No index experiment or final report has been implemented yet.
 
 ## Progress Log
 
@@ -563,6 +582,7 @@ Recommended commit message:
 - 2026-05-15: Created Milestone 10 relationship path query page and tests.
 - 2026-05-15: Created Milestone 11 required SQL queries and query documentation.
 - 2026-05-16: Created Milestone 12 simulated data generator, validator, and documentation.
+- 2026-05-16: Created Milestone 13 PostgreSQL import/export workflow documentation and SQL.
 
 ## Open Questions
 
