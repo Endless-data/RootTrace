@@ -130,6 +130,7 @@ dl {
 
 .actions {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
   gap: 12px;
   margin-top: 24px;
@@ -423,6 +424,15 @@ li + li {
   background: var(--panel);
   color: var(--muted);
   overflow-wrap: anywhere;
+}
+
+.success-state {
+  border: 1px solid #b7e4c7;
+  border-radius: 8px;
+  padding: 12px 14px;
+  background: var(--success-bg);
+  color: #166534;
+  font-weight: 650;
 }
 
 .danger-zone {

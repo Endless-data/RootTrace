@@ -4,34 +4,52 @@
   <div class="page-header">
     <div>
       <h2>导入导出 - {{ family_tree.name }}</h2>
-      <p>使用已有 PostgreSQL COPY 脚本完成 CSV 批量导入和分支备份导出。</p>
+      <p>上传或下载当前族谱的成员、亲子关系和婚姻关系 CSV 数据。</p>
     </div>
     <a class="button-secondary button" href="{{ url_for('family_trees.detail', tree_id=family_tree.id) }}">返回族谱详情</a>
   </div>
 
+  {% if error %}
+    <p role="alert">{{ error }}</p>
+  {% endif %}
+  {% if import_summary %}
+    <p class="success-state">
+      导入完成：成员 {{ import_summary.members }} 条，亲子关系 {{ import_summary.parent_child_relationships }} 条，婚姻关系 {{ import_summary.marriages }} 条。
+    </p>
+  {% endif %}
+
   <section class="card">
-    <h3>批量导入</h3>
-    <p>导入脚本会读取 <code>data/generated</code> 中的模拟 CSV 数据，并写入 PostgreSQL 数据库。</p>
-    <pre><code>docker compose exec -T db psql -U roottrace -d roottrace -f /schema/import_simulated_data.sql</code></pre>
+    <h3>CSV 导入</h3>
+    <p><code>members.csv</code> 必填，关系文件可选。导入时会忽略文件中的 <code>family_tree_id</code>，统一写入当前族谱。</p>
+    <form action="{{ url_for('family_trees.import_csv', tree_id=family_tree.id) }}" method="post" enctype="multipart/form-data">
+      <label for="members_csv">members.csv</label>
+      <input id="members_csv" name="members_csv" type="file" accept=".csv,text/csv" required>
+
+      <label for="parent_child_relationships_csv">parent_child_relationships.csv</label>
+      <input id="parent_child_relationships_csv" name="parent_child_relationships_csv" type="file" accept=".csv,text/csv">
+
+      <label for="marriages_csv">marriages.csv</label>
+      <input id="marriages_csv" name="marriages_csv" type="file" accept=".csv,text/csv">
+
+      <button type="submit">上传并导入</button>
+    </form>
   </section>
 
   <section class="card">
-    <h3>分支导出</h3>
-    <p>导出脚本会导出指定根成员的直系后代分支，默认输出到 <code>exports/branch_export.csv</code>。</p>
-    <pre><code>docker compose exec -T db psql -U roottrace -d roottrace -f /schema/export_branch.sql</code></pre>
+    <h3>CSV 导出</h3>
+    <p>下载当前族谱的 ZIP 文件，内含 <code>members.csv</code>、<code>parent_child_relationships.csv</code> 和 <code>marriages.csv</code>。</p>
+    <a class="button" href="{{ url_for('family_trees.export_zip', tree_id=family_tree.id) }}">下载 ZIP</a>
   </section>
 
   <section class="card">
-    <h3>相关文件</h3>
+    <h3>文件格式</h3>
     <dl class="meta-list">
-      <dt>导入 SQL</dt>
-      <dd>sql/import_simulated_data.sql</dd>
-      <dt>导出 SQL</dt>
-      <dd>sql/export_branch.sql</dd>
-      <dt>流程文档</dt>
-      <dd>docs/import-export.md</dd>
-      <dt>导出结果</dt>
-      <dd>exports/branch_export.csv</dd>
+      <dt>members.csv</dt>
+      <dd>id, family_tree_id, name, gender, birth_year, death_year, generation, biography, created_at</dd>
+      <dt>parent_child_relationships.csv</dt>
+      <dd>id, family_tree_id, parent_id, child_id, relationship_type</dd>
+      <dt>marriages.csv</dt>
+      <dd>id, family_tree_id, person_a_id, person_b_id, start_year, end_year</dd>
     </dl>
   </section>
 {% endblock %}

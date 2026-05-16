@@ -17,3 +17,4 @@ def test_index_route():
     assert response.content_type.startswith("text/html")
     assert "RootTrace 族谱管理系统".encode() in response.data
     assert "创建账户".encode() in response.data
+    assert b'class="button button-secondary" href="/auth/login"' in response.data

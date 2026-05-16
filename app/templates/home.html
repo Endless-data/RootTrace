@@ -12,7 +12,7 @@
         <a class="button" href="{{ url_for('family_trees.index') }}">进入族谱管理</a>
       {% else %}
         <a class="button" href="{{ url_for('auth.register') }}">创建账户</a>
-        <a href="{{ url_for('auth.login') }}">登录</a>
+        <a class="button button-secondary" href="{{ url_for('auth.login') }}">登录</a>
       {% endif %}
     </div>
   </section>
