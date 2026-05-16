@@ -56,6 +56,28 @@ def parse_revision_time(raw_value):
     return date.fromisoformat(raw_value)
 
 
+def family_tree_form_data():
+    name = request.form.get("name", "").strip()
+    surname = request.form.get("surname", "").strip()
+    revision_time_raw = request.form.get("revision_time", "").strip()
+
+    if not name:
+        return None, "Family tree name is required."
+    if not surname:
+        return None, "Surname is required."
+
+    try:
+        revision_time = parse_revision_time(revision_time_raw)
+    except ValueError:
+        return None, "Invalid revision date."
+
+    return {
+        "name": name,
+        "surname": surname,
+        "revision_time": revision_time,
+    }, None
+
+
 def parse_required_int(raw_value, field_name):
     try:
         return int(raw_value)
@@ -261,25 +283,10 @@ def create():
     error = None
 
     if request.method == "POST":
-        name = request.form.get("name", "").strip()
-        surname = request.form.get("surname", "").strip()
-        revision_time_raw = request.form.get("revision_time", "").strip()
-
-        if not name:
-            error = "Family tree name is required."
-        elif not surname:
-            error = "Surname is required."
-
+        data, error = family_tree_form_data()
         if error is None:
-            try:
-                revision_time = parse_revision_time(revision_time_raw)
-            except ValueError:
-                return render_template("family_trees/new.html", error="Invalid revision date."), 400
-
             family_tree = FamilyTree(
-                name=name,
-                surname=surname,
-                revision_time=revision_time,
+                **data,
                 created_by_user_id=g.user.id,
             )
             db.session.add(family_tree)
@@ -289,6 +296,32 @@ def create():
         return render_template("family_trees/new.html", error=error), 400
 
     return render_template("family_trees/new.html", error=error)
+
+
+@bp.route("/<int:tree_id>/edit", methods=("GET", "POST"))
+@login_required
+@owner_required
+def edit(family_tree):
+    if request.method == "POST":
+        data, error = family_tree_form_data()
+        if error:
+            return render_template("family_trees/edit.html", family_tree=family_tree, error=error), 400
+
+        for field, value in data.items():
+            setattr(family_tree, field, value)
+        db.session.commit()
+        return redirect(url_for("family_trees.detail", tree_id=family_tree.id))
+
+    return render_template("family_trees/edit.html", family_tree=family_tree, error=None)
+
+
+@bp.post("/<int:tree_id>/delete")
+@login_required
+@owner_required
+def delete(family_tree):
+    db.session.delete(family_tree)
+    db.session.commit()
+    return redirect(url_for("family_trees.index"))
 
 
 @bp.get("/<int:tree_id>")

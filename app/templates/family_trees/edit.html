@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="page-header">
+    <div>
+      <h2>编辑族谱</h2>
+      <p>更新谱名、姓氏和修谱日期。</p>
+    </div>
+    <a class="button-secondary button" href="{{ url_for('family_trees.detail', tree_id=family_tree.id) }}">返回族谱详情</a>
+  </div>
+  {% if error %}
+    <p role="alert">{{ error }}</p>
+  {% endif %}
+  <form method="post">
+    <label for="name">谱名</label>
+    <input id="name" name="name" value="{{ family_tree.name }}" required>
+
+    <label for="surname">姓氏</label>
+    <input id="surname" name="surname" value="{{ family_tree.surname }}" required>
+
+    <label for="revision_time">修谱日期</label>
+    <input id="revision_time" name="revision_time" type="date" value="{{ family_tree.revision_time or '' }}">
+
+    <button type="submit">保存</button>
+  </form>
+{% endblock %}

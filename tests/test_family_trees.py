@@ -162,6 +162,96 @@ def test_family_tree_detail_links_to_import_export(app, client):
     assert f"/family-trees/{family_tree.id}/import-export".encode() in response.data
 
 
+def test_family_tree_detail_shows_owner_edit_and_delete_actions(app, client):
+    register(client, "alice", "Alice")
+    login(client, "alice")
+    create_family_tree(client)
+
+    with app.app_context():
+        family_tree = FamilyTree.query.filter_by(name="Chen Genealogy").one()
+
+    response = client.get(f"/family-trees/{family_tree.id}")
+
+    assert response.status_code == 200
+    assert "编辑族谱".encode() in response.data
+    assert f"/family-trees/{family_tree.id}/edit".encode() in response.data
+    assert "删除族谱".encode() in response.data
+    assert f"/family-trees/{family_tree.id}/delete".encode() in response.data
+
+
+def test_creator_can_edit_family_tree(app, client):
+    register(client, "alice", "Alice")
+    login(client, "alice")
+    create_family_tree(client)
+
+    with app.app_context():
+        family_tree = FamilyTree.query.filter_by(name="Chen Genealogy").one()
+        tree_id = family_tree.id
+
+    response = client.post(
+        f"/family-trees/{tree_id}/edit",
+        data={"name": "Updated Genealogy", "surname": "Li", "revision_time": "2026-05-16"},
+    )
+
+    assert response.status_code == 302
+    assert response.headers["Location"].endswith(f"/family-trees/{tree_id}")
+    with app.app_context():
+        updated = db.session.get(FamilyTree, tree_id)
+        assert updated.name == "Updated Genealogy"
+        assert updated.surname == "Li"
+        assert updated.revision_time.isoformat() == "2026-05-16"
+
+
+@pytest.mark.parametrize(
+    ("data", "message"),
+    (
+        ({"name": "", "surname": "Chen", "revision_time": ""}, b"Family tree name is required"),
+        ({"name": "Chen Genealogy", "surname": "", "revision_time": ""}, b"Surname is required"),
+        ({"name": "Chen Genealogy", "surname": "Chen", "revision_time": "invalid"}, b"Invalid revision date"),
+    ),
+)
+def test_family_tree_edit_validates_input(app, client, data, message):
+    register(client, "alice", "Alice")
+    login(client, "alice")
+    create_family_tree(client)
+
+    with app.app_context():
+        family_tree = FamilyTree.query.filter_by(name="Chen Genealogy").one()
+
+    response = client.post(f"/family-trees/{family_tree.id}/edit", data=data)
+
+    assert response.status_code == 400
+    assert message in response.data
+
+
+def test_collaborator_cannot_edit_family_tree(app, client):
+    register(client, "alice", "Alice")
+    register(client, "bob", "Bob")
+    login(client, "alice")
+    create_family_tree(client)
+
+    with app.app_context():
+        family_tree = FamilyTree.query.filter_by(name="Chen Genealogy").one()
+        tree_id = family_tree.id
+
+    client.post(
+        f"/family-trees/{tree_id}/collaborators",
+        data={"username": "bob"},
+    )
+    client.post("/auth/logout")
+    login(client, "bob")
+
+    response = client.post(
+        f"/family-trees/{tree_id}/edit",
+        data={"name": "Bob Update", "surname": "Bob", "revision_time": ""},
+    )
+
+    assert response.status_code == 403
+    with app.app_context():
+        family_tree = db.session.get(FamilyTree, tree_id)
+        assert family_tree.name == "Chen Genealogy"
+
+
 def test_creator_can_view_import_export_page(app, client):
     register(client, "alice", "Alice")
     login(client, "alice")
@@ -430,6 +520,74 @@ def test_uninvited_user_cannot_import_or_export(app, client):
 
     assert import_response.status_code == 403
     assert export_response.status_code == 403
+
+
+def test_creator_can_delete_family_tree_with_related_data(app, client):
+    register(client, "alice", "Alice")
+    register(client, "bob", "Bob")
+    login(client, "alice")
+    create_family_tree(client)
+
+    with app.app_context():
+        family_tree = FamilyTree.query.filter_by(name="Chen Genealogy").one()
+        bob = User.query.filter_by(username="bob").one()
+        parent = Member(family_tree_id=family_tree.id, name="Parent")
+        child = Member(family_tree_id=family_tree.id, name="Child")
+        db.session.add_all([parent, child])
+        db.session.flush()
+        db.session.add(FamilyTreeCollaborator(family_tree_id=family_tree.id, user_id=bob.id))
+        db.session.add(
+            ParentChildRelationship(
+                family_tree_id=family_tree.id,
+                parent_id=parent.id,
+                child_id=child.id,
+                relationship_type="father",
+            )
+        )
+        db.session.add(
+            Marriage(
+                family_tree_id=family_tree.id,
+                person_a_id=parent.id,
+                person_b_id=child.id,
+            )
+        )
+        db.session.commit()
+        tree_id = family_tree.id
+
+    response = client.post(f"/family-trees/{tree_id}/delete")
+
+    assert response.status_code == 302
+    assert response.headers["Location"].endswith("/family-trees")
+    with app.app_context():
+        assert db.session.get(FamilyTree, tree_id) is None
+        assert Member.query.filter_by(family_tree_id=tree_id).count() == 0
+        assert FamilyTreeCollaborator.query.filter_by(family_tree_id=tree_id).count() == 0
+        assert ParentChildRelationship.query.filter_by(family_tree_id=tree_id).count() == 0
+        assert Marriage.query.filter_by(family_tree_id=tree_id).count() == 0
+
+
+def test_non_creator_cannot_delete_family_tree(app, client):
+    register(client, "alice", "Alice")
+    register(client, "bob", "Bob")
+    login(client, "alice")
+    create_family_tree(client)
+
+    with app.app_context():
+        family_tree = FamilyTree.query.filter_by(name="Chen Genealogy").one()
+        tree_id = family_tree.id
+
+    client.post(
+        f"/family-trees/{tree_id}/collaborators",
+        data={"username": "bob"},
+    )
+    client.post("/auth/logout")
+    login(client, "bob")
+
+    response = client.post(f"/family-trees/{tree_id}/delete")
+
+    assert response.status_code == 403
+    with app.app_context():
+        assert db.session.get(FamilyTree, tree_id) is not None
 
 
 def test_non_creator_cannot_invite_collaborator(app, client):

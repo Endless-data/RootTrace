@@ -6,7 +6,12 @@
       <h2>{{ family_tree.name }}</h2>
       <p>{{ family_tree.surname }} 氏族谱记录</p>
     </div>
-    <a class="button" href="{{ url_for('members.index', tree_id=family_tree.id) }}">管理成员</a>
+    <div class="actions">
+      {% if g.user and g.user.id == family_tree.created_by_user_id %}
+        <a class="button-secondary button" href="{{ url_for('family_trees.edit', tree_id=family_tree.id) }}">编辑族谱</a>
+      {% endif %}
+      <a class="button" href="{{ url_for('members.index', tree_id=family_tree.id) }}">管理成员</a>
+    </div>
   </div>
 
   <h3>数据概览</h3>
@@ -72,6 +77,13 @@
         <label for="username">用户名</label>
         <input id="username" name="username" required>
         <button type="submit">邀请</button>
+      </form>
+    </section>
+
+    <section class="danger-zone">
+      <h3>危险操作</h3>
+      <form action="{{ url_for('family_trees.delete', tree_id=family_tree.id) }}" method="post">
+        <button class="button-danger" type="submit">删除族谱</button>
       </form>
     </section>
   {% endif %}
