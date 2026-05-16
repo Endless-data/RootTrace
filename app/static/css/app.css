@@ -159,6 +159,10 @@ dl {
   margin: 0 auto;
 }
 
+.auth-panel form button {
+  width: 100%;
+}
+
 .card,
 .toolbar,
 .table-panel {
@@ -298,6 +302,18 @@ textarea {
 textarea {
   min-height: 120px;
   resize: vertical;
+}
+
+pre {
+  overflow-x: auto;
+  border-radius: 8px;
+  padding: 14px;
+  background: #111827;
+  color: #f9fafb;
+}
+
+code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
 
 button,

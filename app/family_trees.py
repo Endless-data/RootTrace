@@ -110,6 +110,17 @@ def detail(tree_id):
     )
 
 
+@bp.get("/<int:tree_id>/import-export")
+@login_required
+def import_export(tree_id):
+    family_tree = db.session.get(FamilyTree, tree_id)
+    if family_tree is None:
+        abort(404)
+    if not can_access_family_tree(g.user, family_tree):
+        abort(403)
+    return render_template("family_trees/import_export.html", family_tree=family_tree)
+
+
 @bp.post("/<int:tree_id>/collaborators")
 @login_required
 @owner_required

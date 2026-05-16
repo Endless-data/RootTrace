@@ -46,6 +46,7 @@
     <a class="card" href="{{ url_for('tree_preview.index', tree_id=family_tree.id) }}">后代树预览</a>
     <a class="card" href="{{ url_for('ancestors.index', tree_id=family_tree.id) }}">祖先查询</a>
     <a class="card" href="{{ url_for('relationship_paths.index', tree_id=family_tree.id) }}">亲缘路径查询</a>
+    <a class="card" href="{{ url_for('family_trees.import_export', tree_id=family_tree.id) }}">导入导出</a>
   </div>
 
   <section class="card">

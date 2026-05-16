@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="page-header">
+    <div>
+      <h2>导入导出 - {{ family_tree.name }}</h2>
+      <p>使用已有 PostgreSQL COPY 脚本完成 CSV 批量导入和分支备份导出。</p>
+    </div>
+    <a class="button-secondary button" href="{{ url_for('family_trees.detail', tree_id=family_tree.id) }}">返回族谱详情</a>
+  </div>
+
+  <section class="card">
+    <h3>批量导入</h3>
+    <p>导入脚本会读取 <code>data/generated</code> 中的模拟 CSV 数据，并写入 PostgreSQL 数据库。</p>
+    <pre><code>docker compose exec -T db psql -U roottrace -d roottrace -f /schema/import_simulated_data.sql</code></pre>
+  </section>
+
+  <section class="card">
+    <h3>分支导出</h3>
+    <p>导出脚本会导出指定根成员的直系后代分支，默认输出到 <code>exports/branch_export.csv</code>。</p>
+    <pre><code>docker compose exec -T db psql -U roottrace -d roottrace -f /schema/export_branch.sql</code></pre>
+  </section>
+
+  <section class="card">
+    <h3>相关文件</h3>
+    <dl class="meta-list">
+      <dt>导入 SQL</dt>
+      <dd>sql/import_simulated_data.sql</dd>
+      <dt>导出 SQL</dt>
+      <dd>sql/export_branch.sql</dd>
+      <dt>流程文档</dt>
+      <dd>docs/import-export.md</dd>
+      <dt>导出结果</dt>
+      <dd>exports/branch_export.csv</dd>
+    </dl>
+  </section>
+{% endblock %}

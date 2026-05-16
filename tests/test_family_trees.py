@@ -140,6 +140,59 @@ def test_invited_user_can_access_family_tree(app, client):
     assert b"Chen Genealogy" in response.data
 
 
+def test_family_tree_detail_links_to_import_export(app, client):
+    register(client, "alice", "Alice")
+    login(client, "alice")
+    create_family_tree(client)
+
+    with app.app_context():
+        family_tree = FamilyTree.query.filter_by(name="Chen Genealogy").one()
+
+    response = client.get(f"/family-trees/{family_tree.id}")
+
+    assert response.status_code == 200
+    assert "导入导出".encode() in response.data
+    assert f"/family-trees/{family_tree.id}/import-export".encode() in response.data
+
+
+def test_creator_can_view_import_export_page(app, client):
+    register(client, "alice", "Alice")
+    login(client, "alice")
+    create_family_tree(client)
+
+    with app.app_context():
+        family_tree = FamilyTree.query.filter_by(name="Chen Genealogy").one()
+
+    response = client.get(f"/family-trees/{family_tree.id}/import-export")
+
+    assert response.status_code == 200
+    assert "批量导入".encode() in response.data
+    assert b"sql/import_simulated_data.sql" in response.data
+    assert b"sql/export_branch.sql" in response.data
+
+
+def test_collaborator_can_view_import_export_page(app, client):
+    register(client, "alice", "Alice")
+    register(client, "bob", "Bob")
+    login(client, "alice")
+    create_family_tree(client)
+
+    with app.app_context():
+        family_tree = FamilyTree.query.filter_by(name="Chen Genealogy").one()
+
+    client.post(
+        f"/family-trees/{family_tree.id}/collaborators",
+        data={"username": "bob"},
+    )
+    client.post("/auth/logout")
+    login(client, "bob")
+
+    response = client.get(f"/family-trees/{family_tree.id}/import-export")
+
+    assert response.status_code == 200
+    assert "分支导出".encode() in response.data
+
+
 def test_uninvited_user_cannot_access_family_tree(app, client):
     register(client, "alice", "Alice")
     register(client, "mallory", "Mallory")
@@ -153,6 +206,23 @@ def test_uninvited_user_cannot_access_family_tree(app, client):
     login(client, "mallory")
 
     response = client.get(f"/family-trees/{family_tree.id}")
+
+    assert response.status_code == 403
+
+
+def test_uninvited_user_cannot_view_import_export_page(app, client):
+    register(client, "alice", "Alice")
+    register(client, "mallory", "Mallory")
+    login(client, "alice")
+    create_family_tree(client)
+
+    with app.app_context():
+        family_tree = FamilyTree.query.filter_by(name="Chen Genealogy").one()
+
+    client.post("/auth/logout")
+    login(client, "mallory")
+
+    response = client.get(f"/family-trees/{family_tree.id}/import-export")
 
     assert response.status_code == 403
 
