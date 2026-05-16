@@ -1,19 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
+  {% set gender_labels = {"unknown": "未知", "male": "男", "female": "女"} %}
   <div class="page-header">
     <div>
-      <h2>Members - {{ family_tree.name }}</h2>
-      <p>Search and manage members in this family tree.</p>
+      <h2>成员管理 - {{ family_tree.name }}</h2>
+      <p>搜索并管理该族谱中的成员。</p>
     </div>
-    <a class="button" href="{{ url_for('members.create', tree_id=family_tree.id) }}">Create member</a>
+    <a class="button" href="{{ url_for('members.create', tree_id=family_tree.id) }}">创建成员</a>
   </div>
 
   <div class="toolbar">
     <form method="get">
-      <label for="q">Search by name</label>
+      <label for="q">按姓名搜索</label>
       <input id="q" name="q" value="{{ query }}">
-      <button type="submit">Search</button>
+      <button type="submit">搜索</button>
     </form>
   </div>
 
@@ -23,10 +24,10 @@
         <thead>
           <tr>
             <th>ID</th>
-            <th>Name</th>
-            <th>Gender</th>
-            <th>Generation</th>
-            <th>Years</th>
+            <th>姓名</th>
+            <th>性别</th>
+            <th>辈分</th>
+            <th>生卒年份</th>
           </tr>
         </thead>
         <tbody>
@@ -38,8 +39,8 @@
                   {{ member.name }}
                 </a>
               </td>
-              <td>{{ member.gender }}</td>
-              <td>{{ member.generation or "Not set" }}</td>
+              <td>{{ gender_labels.get(member.gender, member.gender) }}</td>
+              <td>{{ member.generation or "未填写" }}</td>
               <td>{{ member.birth_year or "?" }} - {{ member.death_year or "?" }}</td>
             </tr>
           {% endfor %}
@@ -47,6 +48,6 @@
       </table>
     </div>
   {% else %}
-    <p class="empty-state">No members found.</p>
+    <p class="empty-state">未找到成员。</p>
   {% endif %}
 {% endblock %}

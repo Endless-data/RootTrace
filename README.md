@@ -33,13 +33,13 @@ docker compose exec -T db psql -U roottrace -d roottrace -f /schema/schema.sql
 docker compose exec -T db psql -U roottrace -d roottrace -c "\dt"
 ```
 
-Create a local environment file from the example:
+从示例文件创建本地环境配置：
 
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` and replace `SECRET_KEY` with a long random value. The `.env` file is ignored by git.
+编辑 `.env`，将 `SECRET_KEY` 替换为足够长的随机值。`.env` 文件已被 git 忽略，不会提交到仓库。
 
 Run the app locally:
 
@@ -50,7 +50,7 @@ uv run flask --app app run
 ```
 
 The default local `DATABASE_URL` matches `compose.yaml`: `postgresql+psycopg://roottrace@localhost:5433/roottrace`.
-Flask loads `.env` automatically through `python-dotenv`. If `SECRET_KEY` is not set, the app still generates a temporary development key at process startup; for repeatable local sessions, keep a stable `SECRET_KEY` in `.env`.
+Flask 会通过 `python-dotenv` 自动加载 `.env`。如果没有设置 `SECRET_KEY`，应用会在进程启动时生成临时开发密钥；如果希望本地会话可重复，请在 `.env` 中保留一个稳定的 `SECRET_KEY`。
 
 ## Database Design
 
@@ -96,43 +96,43 @@ The exported branch CSV is written to `exports/branch_export.csv` and ignored by
 - UI-3 improves relationship management and genealogy query pages.
 - Frontend demo guide: `docs/frontend-demo.md`
 
-## Authentication
+## 认证
 
-- Register: `/auth/register`
-- Login: `/auth/login`
-- Logout: `POST /auth/logout`
+- 注册：`/auth/register`
+- 登录：`/auth/login`
+- 退出登录：`POST /auth/logout`
 
-## Family Trees
+## 族谱
 
-- List accessible family trees: `/family-trees`
-- Create a family tree: `/family-trees/new`
-- View a family tree: `/family-trees/<id>`
-- Invite a collaborator: `POST /family-trees/<id>/collaborators`
+- 查看可访问族谱：`/family-trees`
+- 创建族谱：`/family-trees/new`
+- 查看族谱详情：`/family-trees/<id>`
+- 邀请协作者：`POST /family-trees/<id>/collaborators`
 
-## Members
+## 成员
 
-- List and search members: `/family-trees/<tree_id>/members`
-- Create a member: `/family-trees/<tree_id>/members/new`
-- View a member: `/family-trees/<tree_id>/members/<member_id>`
-- Edit a member: `/family-trees/<tree_id>/members/<member_id>/edit`
-- Delete a member: `POST /family-trees/<tree_id>/members/<member_id>/delete`
+- 查看和搜索成员：`/family-trees/<tree_id>/members`
+- 创建成员：`/family-trees/<tree_id>/members/new`
+- 查看成员详情：`/family-trees/<tree_id>/members/<member_id>`
+- 编辑成员：`/family-trees/<tree_id>/members/<member_id>/edit`
+- 删除成员：`POST /family-trees/<tree_id>/members/<member_id>/delete`
 
-## Relationships
+## 关系
 
-- Manage a member's relationships: `/family-trees/<tree_id>/members/<member_id>/relationships`
-- Add a parent: `POST /family-trees/<tree_id>/members/<member_id>/relationships/parents`
-- Add a child: `POST /family-trees/<tree_id>/members/<member_id>/relationships/children`
-- Add a spouse: `POST /family-trees/<tree_id>/members/<member_id>/relationships/marriages`
+- 管理成员关系：`/family-trees/<tree_id>/members/<member_id>/relationships`
+- 添加父母：`POST /family-trees/<tree_id>/members/<member_id>/relationships/parents`
+- 添加子女：`POST /family-trees/<tree_id>/members/<member_id>/relationships/children`
+- 添加配偶：`POST /family-trees/<tree_id>/members/<member_id>/relationships/marriages`
 
-## Dashboard And Tree Preview
+## 数据概览和后代树预览
 
-- Dashboard stats are shown on `/family-trees/<tree_id>`
-- Descendant tree preview: `/family-trees/<tree_id>/tree-preview?root_member_id=<member_id>`
+- 数据概览显示在：`/family-trees/<tree_id>`
+- 后代树预览：`/family-trees/<tree_id>/tree-preview?root_member_id=<member_id>`
 
-## Ancestors
+## 祖先查询
 
-- Ancestor query: `/family-trees/<tree_id>/ancestors?member_id=<member_id>`
+- 祖先查询：`/family-trees/<tree_id>/ancestors?member_id=<member_id>`
 
-## Relationship Path
+## 亲缘路径查询
 
-- Relationship path query: `/family-trees/<tree_id>/relationship-path?source_member_id=<id>&target_member_id=<id>`
+- 亲缘路径查询：`/family-trees/<tree_id>/relationship-path?source_member_id=<id>&target_member_id=<id>`

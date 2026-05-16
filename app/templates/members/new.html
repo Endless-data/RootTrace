@@ -3,36 +3,36 @@
 {% block content %}
   <div class="page-header">
     <div>
-      <h2>Create Member - {{ family_tree.name }}</h2>
-      <p>Add a person to this family tree.</p>
+      <h2>创建成员 - {{ family_tree.name }}</h2>
+      <p>向该族谱添加一个成员。</p>
     </div>
   </div>
   {% if error %}
     <p role="alert">{{ error }}</p>
   {% endif %}
   <form method="post">
-    <label for="name">Name</label>
+    <label for="name">姓名</label>
     <input id="name" name="name" required>
 
-    <label for="gender">Gender</label>
+    <label for="gender">性别</label>
     <select id="gender" name="gender">
-      <option value="unknown">unknown</option>
-      <option value="male">male</option>
-      <option value="female">female</option>
+      <option value="unknown">未知</option>
+      <option value="male">男</option>
+      <option value="female">女</option>
     </select>
 
-    <label for="birth_year">Birth year</label>
+    <label for="birth_year">出生年份</label>
     <input id="birth_year" name="birth_year" inputmode="numeric">
 
-    <label for="death_year">Death year</label>
+    <label for="death_year">死亡年份</label>
     <input id="death_year" name="death_year" inputmode="numeric">
 
-    <label for="generation">Generation</label>
+    <label for="generation">辈分</label>
     <input id="generation" name="generation" inputmode="numeric">
 
-    <label for="biography">Biography</label>
+    <label for="biography">生平简介</label>
     <textarea id="biography" name="biography"></textarea>
 
-    <button type="submit">Create</button>
+    <button type="submit">创建</button>
   </form>
 {% endblock %}

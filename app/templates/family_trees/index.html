@@ -3,10 +3,10 @@
 {% block content %}
   <div class="page-header">
     <div>
-      <h2>Family Trees</h2>
-      <p>Open a genealogy record or create a new one.</p>
+      <h2>族谱管理</h2>
+      <p>打开已有族谱，或创建一份新的族谱记录。</p>
     </div>
-    <a class="button" href="{{ url_for('family_trees.create') }}">Create family tree</a>
+    <a class="button" href="{{ url_for('family_trees.create') }}">创建族谱</a>
   </div>
 
   {% if family_trees %}
@@ -16,12 +16,12 @@
           <h3>{{ family_tree.name }}</h3>
           <p>{{ family_tree.surname }}</p>
           <a href="{{ url_for('family_trees.detail', tree_id=family_tree.id) }}">
-            View family tree
+            查看族谱
           </a>
         </article>
       {% endfor %}
     </div>
   {% else %}
-    <p class="empty-state">No accessible family trees.</p>
+    <p class="empty-state">暂无可访问的族谱。</p>
   {% endif %}
 {% endblock %}

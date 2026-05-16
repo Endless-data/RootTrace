@@ -2,9 +2,10 @@
 
 {% macro render_node(node) %}
   <li>
-    {{ node.member.name }} (#{{ node.member.id }}, {{ node.member.gender }}, generation {{ node.member.generation or "?" }})
+    {% set gender_labels = {"unknown": "未知", "male": "男", "female": "女"} %}
+    {{ node.member.name }} (#{{ node.member.id }}，{{ gender_labels.get(node.member.gender, node.member.gender) }}，辈分 {{ node.member.generation or "?" }})
     {% if node.repeated %}
-      <span class="badge badge-warning">cycle detected</span>
+      <span class="badge badge-warning">检测到循环</span>
     {% elif node.children %}
       <ul>
         {% for child in node.children %}
@@ -18,29 +19,29 @@
 {% block content %}
   <div class="page-header">
     <div>
-      <h2>Tree Preview - {{ family_tree.name }}</h2>
-      <p>Preview descendants from one root member.</p>
+      <h2>后代树预览 - {{ family_tree.name }}</h2>
+      <p>从一个根成员开始预览直系后代。</p>
     </div>
   </div>
   <section class="card query-panel">
     <form method="get">
-      <label for="root_member_id">Root member ID</label>
+      <label for="root_member_id">根成员 ID</label>
       <input id="root_member_id" name="root_member_id" value="{{ root_member_id }}" required>
-      <button type="submit">Preview</button>
+      <button type="submit">预览</button>
     </form>
   </section>
 
   {% if tree %}
     <section class="card result-panel">
-      <h3>Descendants of {{ root_member.name }} (#{{ root_member.id }})</h3>
+      <h3>{{ root_member.name }} (#{{ root_member.id }}) 的后代</h3>
       {% if not tree.children %}
-        <p class="empty-state">No descendants.</p>
+        <p class="empty-state">暂无后代。</p>
       {% endif %}
       <ul class="tree-list">
         {{ render_node(tree) }}
       </ul>
     </section>
   {% else %}
-    <p class="empty-state">Enter a member ID to preview descendants.</p>
+    <p class="empty-state">请输入成员 ID 以预览后代。</p>
   {% endif %}
 {% endblock %}

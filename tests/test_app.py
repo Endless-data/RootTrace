@@ -15,5 +15,5 @@ def test_index_route():
 
     assert response.status_code == 200
     assert response.content_type.startswith("text/html")
-    assert b"RootTrace Genealogy Management" in response.data
-    assert b"Create account" in response.data
+    assert "RootTrace 族谱管理系统".encode() in response.data
+    assert "创建账户".encode() in response.data

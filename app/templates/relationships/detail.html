@@ -1,12 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
+  {% set parent_child_labels = {"father": "父亲", "mother": "母亲"} %}
   <div class="page-header">
     <div>
-      <h2>Relationships - {{ member.name }} (#{{ member.id }})</h2>
-      <p>Manage parent-child and marriage relationships.</p>
+      <h2>关系管理 - {{ member.name }} (#{{ member.id }})</h2>
+      <p>管理亲子关系和婚姻关系。</p>
     </div>
-    <a class="button-secondary button" href="{{ url_for('members.detail', tree_id=family_tree.id, member_id=member.id) }}">Back to member</a>
+    <a class="button-secondary button" href="{{ url_for('members.detail', tree_id=family_tree.id, member_id=member.id) }}">返回成员详情</a>
   </div>
   {% if error %}
     <p role="alert">{{ error }}</p>
@@ -14,77 +15,77 @@
 
   <div class="section-grid">
     <section class="card">
-      <h3>Parents</h3>
+      <h3>父母</h3>
       {% if member.parent_relationships %}
         <ul class="relationship-list">
           {% for relationship in member.parent_relationships %}
             <li>
               <span>
-                <span class="badge">{{ relationship.relationship_type }}</span>
+                <span class="badge">{{ parent_child_labels.get(relationship.relationship_type, relationship.relationship_type) }}</span>
                 <a href="{{ url_for('members.detail', tree_id=family_tree.id, member_id=relationship.parent.id) }}">
                   {{ relationship.parent.name }} (#{{ relationship.parent.id }})
                 </a>
               </span>
               <form class="inline-form" action="{{ url_for('relationships.delete_parent_child', tree_id=family_tree.id, relationship_id=relationship.id) }}" method="post">
-                <button class="button-danger" type="submit">Delete</button>
+                <button class="button-danger" type="submit">删除</button>
               </form>
             </li>
           {% endfor %}
         </ul>
       {% else %}
-        <p class="empty-state">No parents.</p>
+        <p class="empty-state">暂无父母关系。</p>
       {% endif %}
 
-      <h4>Add Parent</h4>
+      <h4>添加父母</h4>
       <form action="{{ url_for('relationships.add_parent', tree_id=family_tree.id, member_id=member.id) }}" method="post">
-        <label for="parent_id">Parent member ID</label>
+        <label for="parent_id">父/母成员 ID</label>
         <input id="parent_id" name="parent_id" required>
-        <label for="parent_relationship_type">Type</label>
+        <label for="parent_relationship_type">关系类型</label>
         <select id="parent_relationship_type" name="relationship_type">
-          <option value="father">father</option>
-          <option value="mother">mother</option>
+          <option value="father">父亲</option>
+          <option value="mother">母亲</option>
         </select>
-        <button type="submit">Add parent</button>
+        <button type="submit">添加父母</button>
       </form>
     </section>
 
     <section class="card">
-      <h3>Children</h3>
+      <h3>子女</h3>
       {% if member.child_relationships %}
         <ul class="relationship-list">
           {% for relationship in member.child_relationships %}
             <li>
               <span>
-                <span class="badge">{{ relationship.relationship_type }} of</span>
+                <span class="badge">作为{{ parent_child_labels.get(relationship.relationship_type, relationship.relationship_type) }}</span>
                 <a href="{{ url_for('members.detail', tree_id=family_tree.id, member_id=relationship.child.id) }}">
                   {{ relationship.child.name }} (#{{ relationship.child.id }})
                 </a>
               </span>
               <form class="inline-form" action="{{ url_for('relationships.delete_parent_child', tree_id=family_tree.id, relationship_id=relationship.id) }}" method="post">
-                <button class="button-danger" type="submit">Delete</button>
+                <button class="button-danger" type="submit">删除</button>
               </form>
             </li>
           {% endfor %}
         </ul>
       {% else %}
-        <p class="empty-state">No children.</p>
+        <p class="empty-state">暂无子女关系。</p>
       {% endif %}
 
-      <h4>Add Child</h4>
+      <h4>添加子女</h4>
       <form action="{{ url_for('relationships.add_child', tree_id=family_tree.id, member_id=member.id) }}" method="post">
-        <label for="child_id">Child member ID</label>
+        <label for="child_id">子女成员 ID</label>
         <input id="child_id" name="child_id" required>
-        <label for="child_relationship_type">Type</label>
+        <label for="child_relationship_type">关系类型</label>
         <select id="child_relationship_type" name="relationship_type">
-          <option value="father">father</option>
-          <option value="mother">mother</option>
+          <option value="father">父亲</option>
+          <option value="mother">母亲</option>
         </select>
-        <button type="submit">Add child</button>
+        <button type="submit">添加子女</button>
       </form>
     </section>
 
     <section class="card">
-      <h3>Spouses</h3>
+      <h3>配偶</h3>
       {% if marriages %}
         <ul class="relationship-list">
           {% for marriage in marriages %}
@@ -97,24 +98,24 @@
                 <span class="badge">{{ marriage.start_year or "?" }} - {{ marriage.end_year or "?" }}</span>
               </span>
               <form class="inline-form" action="{{ url_for('relationships.delete_marriage', tree_id=family_tree.id, relationship_id=marriage.id) }}" method="post">
-                <button class="button-danger" type="submit">Delete</button>
+                <button class="button-danger" type="submit">删除</button>
               </form>
             </li>
           {% endfor %}
         </ul>
       {% else %}
-        <p class="empty-state">No spouses.</p>
+        <p class="empty-state">暂无配偶关系。</p>
       {% endif %}
 
-      <h4>Add Spouse</h4>
+      <h4>添加配偶</h4>
       <form action="{{ url_for('relationships.add_marriage', tree_id=family_tree.id, member_id=member.id) }}" method="post">
-        <label for="spouse_id">Spouse member ID</label>
+        <label for="spouse_id">配偶成员 ID</label>
         <input id="spouse_id" name="spouse_id" required>
-        <label for="start_year">Start year</label>
+        <label for="start_year">开始年份</label>
         <input id="start_year" name="start_year" inputmode="numeric">
-        <label for="end_year">End year</label>
+        <label for="end_year">结束年份</label>
         <input id="end_year" name="end_year" inputmode="numeric">
-        <button type="submit">Add spouse</button>
+        <button type="submit">添加配偶</button>
       </form>
     </section>
   </div>

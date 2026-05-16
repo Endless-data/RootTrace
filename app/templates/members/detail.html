@@ -1,37 +1,38 @@
 {% extends "base.html" %}
 
 {% block content %}
+  {% set gender_labels = {"unknown": "未知", "male": "男", "female": "女"} %}
   <div class="page-header">
     <div>
       <h2>{{ member.name }}</h2>
-      <p>Member #{{ member.id }} in {{ family_tree.name }}</p>
+      <p>{{ family_tree.name }} 中的成员 #{{ member.id }}</p>
     </div>
     <div class="actions">
-      <a class="button" href="{{ url_for('members.edit', tree_id=family_tree.id, member_id=member.id) }}">Edit</a>
-      <a class="button-secondary button" href="{{ url_for('relationships.detail', tree_id=family_tree.id, member_id=member.id) }}">Relationships</a>
-      <a class="button-secondary button" href="{{ url_for('ancestors.index', tree_id=family_tree.id, member_id=member.id) }}">Ancestors</a>
-      <a class="button-secondary button" href="{{ url_for('relationship_paths.index', tree_id=family_tree.id, source_member_id=member.id) }}">Find Relationship Path</a>
+      <a class="button" href="{{ url_for('members.edit', tree_id=family_tree.id, member_id=member.id) }}">编辑</a>
+      <a class="button-secondary button" href="{{ url_for('relationships.detail', tree_id=family_tree.id, member_id=member.id) }}">关系管理</a>
+      <a class="button-secondary button" href="{{ url_for('ancestors.index', tree_id=family_tree.id, member_id=member.id) }}">祖先查询</a>
+      <a class="button-secondary button" href="{{ url_for('relationship_paths.index', tree_id=family_tree.id, source_member_id=member.id) }}">查找亲缘路径</a>
     </div>
   </div>
   <dl>
     <dt>ID</dt>
     <dd>{{ member.id }}</dd>
-    <dt>Gender</dt>
-    <dd>{{ member.gender }}</dd>
-    <dt>Birth year</dt>
-    <dd>{{ member.birth_year or "Not set" }}</dd>
-    <dt>Death year</dt>
-    <dd>{{ member.death_year or "Not set" }}</dd>
-    <dt>Generation</dt>
-    <dd>{{ member.generation or "Not set" }}</dd>
-    <dt>Biography</dt>
-    <dd>{{ member.biography or "Not set" }}</dd>
+    <dt>性别</dt>
+    <dd>{{ gender_labels.get(member.gender, member.gender) }}</dd>
+    <dt>出生年份</dt>
+    <dd>{{ member.birth_year or "未填写" }}</dd>
+    <dt>死亡年份</dt>
+    <dd>{{ member.death_year or "未填写" }}</dd>
+    <dt>辈分</dt>
+    <dd>{{ member.generation or "未填写" }}</dd>
+    <dt>生平简介</dt>
+    <dd>{{ member.biography or "未填写" }}</dd>
   </dl>
 
   <section class="danger-zone">
-    <h3>Danger Zone</h3>
+    <h3>危险操作</h3>
     <form action="{{ url_for('members.delete', tree_id=family_tree.id, member_id=member.id) }}" method="post">
-      <button class="button-danger" type="submit">Delete</button>
+      <button class="button-danger" type="submit">删除</button>
     </form>
   </section>
 {% endblock %}

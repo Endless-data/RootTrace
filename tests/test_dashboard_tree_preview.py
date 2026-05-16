@@ -80,7 +80,7 @@ def test_dashboard_stats_show_member_counts_and_ratios(app, client):
     response = client.get(f"/family-trees/{tree_id}")
 
     assert response.status_code == 200
-    assert b"Total members" in response.data
+    assert "成员总数".encode() in response.data
     assert b"3" in response.data
     assert b"33.3%" in response.data
 
@@ -91,7 +91,7 @@ def test_dashboard_handles_empty_family_tree(client, app):
     response = client.get(f"/family-trees/{tree_id}")
 
     assert response.status_code == 200
-    assert b"Total members" in response.data
+    assert "成员总数".encode() in response.data
     assert b"0.0%" in response.data
 
 
@@ -134,7 +134,7 @@ def test_tree_preview_displays_descendant_branch_with_ids(app, client):
     response = client.get(f"/family-trees/{tree_id}/tree-preview?root_member_id={root_id}")
 
     assert response.status_code == 200
-    assert b"Descendants of Chen Ming" in response.data
+    assert f"Chen Ming (#{root_id}) 的后代".encode() in response.data
     assert f"#{root_id}".encode() in response.data
     assert f"#{child_id}".encode() in response.data
     assert b"Grandchild" in response.data
@@ -149,7 +149,7 @@ def test_tree_preview_shows_no_descendants(app, client):
     response = client.get(f"/family-trees/{tree_id}/tree-preview?root_member_id={member_id}")
 
     assert response.status_code == 200
-    assert b"No descendants" in response.data
+    assert "暂无后代".encode() in response.data
 
 
 def test_tree_preview_rejects_root_from_other_tree(app, client):
@@ -232,4 +232,4 @@ def test_tree_preview_marks_cycle_without_infinite_recursion(app, client):
     response = client.get(f"/family-trees/{tree_id}/tree-preview?root_member_id={root_id}")
 
     assert response.status_code == 200
-    assert b"cycle detected" in response.data
+    assert "检测到循环".encode() in response.data

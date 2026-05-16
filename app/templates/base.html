@@ -11,18 +11,18 @@
       <div class="site-header__inner">
         <a class="brand" href="{{ url_for('main.index') }}">
           <span class="brand__name">RootTrace</span>
-          <span class="brand__tagline">Genealogy management system</span>
+          <span class="brand__tagline">族谱管理系统</span>
         </a>
         <nav class="site-nav" aria-label="Primary navigation">
           {% if g.user %}
             <span class="user-label">{{ g.user.display_name }}</span>
-            <a href="{{ url_for('family_trees.index') }}">Family Trees</a>
+            <a href="{{ url_for('family_trees.index') }}">族谱管理</a>
             <form action="{{ url_for('auth.logout') }}" method="post">
-              <button type="submit">Logout</button>
+              <button type="submit">退出登录</button>
             </form>
           {% else %}
-            <a href="{{ url_for('auth.register') }}">Register</a>
-            <a href="{{ url_for('auth.login') }}">Login</a>
+            <a href="{{ url_for('auth.register') }}">注册</a>
+            <a href="{{ url_for('auth.login') }}">登录</a>
           {% endif %}
         </nav>
       </div>

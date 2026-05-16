@@ -2,17 +2,17 @@
 
 {% block content %}
   <section class="hero">
-    <h2>RootTrace Genealogy Management</h2>
+    <h2>RootTrace 族谱管理系统</h2>
     <p>
-      RootTrace helps manage family trees, members, parent-child relationships,
-      marriages, ancestor queries, and relationship path lookup for the database experiment.
+      RootTrace 用于管理族谱、成员、亲子关系、婚姻关系、祖先查询和亲缘路径查询，
+      适合作为数据库课程实验的演示系统。
     </p>
     <div class="actions">
       {% if g.user %}
-        <a class="button" href="{{ url_for('family_trees.index') }}">Open family trees</a>
+        <a class="button" href="{{ url_for('family_trees.index') }}">进入族谱管理</a>
       {% else %}
-        <a class="button" href="{{ url_for('auth.register') }}">Create account</a>
-        <a href="{{ url_for('auth.login') }}">Login</a>
+        <a class="button" href="{{ url_for('auth.register') }}">创建账户</a>
+        <a href="{{ url_for('auth.login') }}">登录</a>
       {% endif %}
     </div>
   </section>

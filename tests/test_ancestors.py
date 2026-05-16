@@ -98,7 +98,7 @@ def test_ancestor_query_shows_empty_state(app, client):
     response = client.get(f"/family-trees/{tree_id}/ancestors?member_id={member_id}")
 
     assert response.status_code == 200
-    assert b"No known ancestors" in response.data
+    assert "暂无已知祖先".encode() in response.data
     assert b"Root" in response.data
 
 
@@ -121,7 +121,7 @@ def test_ancestor_query_shows_multiple_generations(app, client):
     response = client.get(f"/family-trees/{tree_id}/ancestors?member_id={child_id}")
 
     assert response.status_code == 200
-    assert b"Ancestors of Child" in response.data
+    assert f"Child (#{child_id}) 的祖先".encode() in response.data
     assert f"#{child_id}".encode() in response.data
     assert f"#{parent_id}".encode() in response.data
     assert f"#{grandparent_id}".encode() in response.data
@@ -232,4 +232,4 @@ def test_ancestor_query_marks_cycle_without_infinite_recursion(app, client):
     response = client.get(f"/family-trees/{tree_id}/ancestors?member_id={member_a_id}")
 
     assert response.status_code == 200
-    assert b"cycle detected" in response.data
+    assert "检测到循环".encode() in response.data

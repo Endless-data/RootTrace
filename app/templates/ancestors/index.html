@@ -2,9 +2,10 @@
 
 {% macro render_node(node) %}
   <li>
-    {{ node.member.name }} (#{{ node.member.id }}, {{ node.member.gender }}, generation {{ node.member.generation or "?" }})
+    {% set gender_labels = {"unknown": "未知", "male": "男", "female": "女"} %}
+    {{ node.member.name }} (#{{ node.member.id }}，{{ gender_labels.get(node.member.gender, node.member.gender) }}，辈分 {{ node.member.generation or "?" }})
     {% if node.repeated %}
-      <span class="badge badge-warning">cycle detected</span>
+      <span class="badge badge-warning">检测到循环</span>
     {% elif node.parents %}
       <ul>
         {% for parent in node.parents %}
@@ -18,29 +19,29 @@
 {% block content %}
   <div class="page-header">
     <div>
-      <h2>Ancestor Query - {{ family_tree.name }}</h2>
-      <p>Trace parents and earlier ancestors for one member.</p>
+      <h2>祖先查询 - {{ family_tree.name }}</h2>
+      <p>查询某个成员的父辈及更早祖先。</p>
     </div>
   </div>
   <section class="card query-panel">
     <form method="get">
-      <label for="member_id">Member ID</label>
+      <label for="member_id">成员 ID</label>
       <input id="member_id" name="member_id" value="{{ member_id }}" required>
-      <button type="submit">Query</button>
+      <button type="submit">查询</button>
     </form>
   </section>
 
   {% if tree %}
     <section class="card result-panel">
-      <h3>Ancestors of {{ member.name }} (#{{ member.id }})</h3>
+      <h3>{{ member.name }} (#{{ member.id }}) 的祖先</h3>
       {% if not tree.parents %}
-        <p class="empty-state">No known ancestors.</p>
+        <p class="empty-state">暂无已知祖先。</p>
       {% endif %}
       <ul class="tree-list">
         {{ render_node(tree) }}
       </ul>
     </section>
   {% else %}
-    <p class="empty-state">Enter a member ID to query ancestors.</p>
+    <p class="empty-state">请输入成员 ID 以查询祖先。</p>
   {% endif %}
 {% endblock %}

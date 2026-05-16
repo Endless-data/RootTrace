@@ -4,52 +4,52 @@
   <div class="page-header">
     <div>
       <h2>{{ family_tree.name }}</h2>
-      <p>{{ family_tree.surname }} genealogy record</p>
+      <p>{{ family_tree.surname }} 氏族谱记录</p>
     </div>
-    <a class="button" href="{{ url_for('members.index', tree_id=family_tree.id) }}">Manage members</a>
+    <a class="button" href="{{ url_for('members.index', tree_id=family_tree.id) }}">管理成员</a>
   </div>
 
-  <h3>Dashboard</h3>
+  <h3>数据概览</h3>
   <div class="stat-grid">
     <div class="stat">
       <span class="stat__value">{{ stats.total }}</span>
-      <span class="stat__label">Total members</span>
+      <span class="stat__label">成员总数</span>
     </div>
     <div class="stat">
       <span class="stat__value">{{ stats.male }}</span>
-      <span class="stat__label">Male ({{ stats.male_percent }})</span>
+      <span class="stat__label">男性 ({{ stats.male_percent }})</span>
     </div>
     <div class="stat">
       <span class="stat__value">{{ stats.female }}</span>
-      <span class="stat__label">Female ({{ stats.female_percent }})</span>
+      <span class="stat__label">女性 ({{ stats.female_percent }})</span>
     </div>
     <div class="stat">
       <span class="stat__value">{{ stats.unknown }}</span>
-      <span class="stat__label">Unknown ({{ stats.unknown_percent }})</span>
+      <span class="stat__label">未知 ({{ stats.unknown_percent }})</span>
     </div>
   </div>
 
   <section class="card">
-    <h3>Family Tree Details</h3>
+    <h3>族谱信息</h3>
     <dl class="meta-list">
-      <dt>Surname</dt>
+      <dt>姓氏</dt>
       <dd>{{ family_tree.surname }}</dd>
-      <dt>Revision date</dt>
-      <dd>{{ family_tree.revision_time or "Not set" }}</dd>
-      <dt>Creator</dt>
+      <dt>修谱日期</dt>
+      <dd>{{ family_tree.revision_time or "未填写" }}</dd>
+      <dt>创建者</dt>
       <dd>{{ family_tree.creator.display_name }}</dd>
     </dl>
   </section>
 
   <div class="card-grid">
-    <a class="card" href="{{ url_for('members.index', tree_id=family_tree.id) }}">Members</a>
-    <a class="card" href="{{ url_for('tree_preview.index', tree_id=family_tree.id) }}">Tree Preview</a>
-    <a class="card" href="{{ url_for('ancestors.index', tree_id=family_tree.id) }}">Ancestor Query</a>
-    <a class="card" href="{{ url_for('relationship_paths.index', tree_id=family_tree.id) }}">Relationship Path Query</a>
+    <a class="card" href="{{ url_for('members.index', tree_id=family_tree.id) }}">成员管理</a>
+    <a class="card" href="{{ url_for('tree_preview.index', tree_id=family_tree.id) }}">后代树预览</a>
+    <a class="card" href="{{ url_for('ancestors.index', tree_id=family_tree.id) }}">祖先查询</a>
+    <a class="card" href="{{ url_for('relationship_paths.index', tree_id=family_tree.id) }}">亲缘路径查询</a>
   </div>
 
   <section class="card">
-    <h3>Collaborators</h3>
+    <h3>协作者</h3>
     {% if family_tree.collaborators %}
       <ul>
         {% for collaboration in family_tree.collaborators %}
@@ -57,20 +57,20 @@
         {% endfor %}
       </ul>
     {% else %}
-      <p class="empty-state">No collaborators.</p>
+      <p class="empty-state">暂无协作者。</p>
     {% endif %}
   </section>
 
   {% if g.user and g.user.id == family_tree.created_by_user_id %}
     <section class="card">
-      <h3>Invite Collaborator</h3>
+      <h3>邀请协作者</h3>
       {% if error %}
         <p role="alert">{{ error }}</p>
       {% endif %}
       <form action="{{ url_for('family_trees.add_collaborator', tree_id=family_tree.id) }}" method="post">
-        <label for="username">Username</label>
+        <label for="username">用户名</label>
         <input id="username" name="username" required>
-        <button type="submit">Invite</button>
+        <button type="submit">邀请</button>
       </form>
     </section>
   {% endif %}

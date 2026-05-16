@@ -119,7 +119,7 @@ def test_relationship_path_shows_direct_parent_child_edge(app, client):
     )
 
     assert response.status_code == 200
-    assert b"Path found" in response.data
+    assert "已找到路径".encode() in response.data
     assert b"Parent" in response.data
     assert b"Child" in response.data
     assert b"father-child" in response.data
@@ -209,7 +209,7 @@ def test_relationship_path_shows_no_path_state(app, client):
     )
 
     assert response.status_code == 200
-    assert b"No relationship path found." in response.data
+    assert "未找到亲缘路径。".encode() in response.data
 
 
 def test_relationship_path_handles_same_member(app, client):
@@ -224,7 +224,7 @@ def test_relationship_path_handles_same_member(app, client):
     )
 
     assert response.status_code == 200
-    assert b"Same member" in response.data
+    assert "同一成员".encode() in response.data
     assert f"#{member_id}".encode() in response.data
 
 
@@ -290,7 +290,7 @@ def test_collaborator_can_query_relationship_path(app, client):
     )
 
     assert response.status_code == 200
-    assert b"Path found" in response.data
+    assert "已找到路径".encode() in response.data
 
 
 def test_relationship_path_disambiguates_duplicate_names_by_id(app, client):
@@ -336,5 +336,5 @@ def test_relationship_path_handles_cycles(app, client):
     )
 
     assert response.status_code == 200
-    assert b"Path found" in response.data
+    assert "已找到路径".encode() in response.data
     assert b"C" in response.data
